@@ -1,0 +1,220 @@
+﻿@{
+    ViewBag.Title = "Cấu hình website";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    string lang = Session["language"].ToString();
+}
+<link rel="stylesheet" href="/asset/admin/plugins/colorpicker/bootstrap-colorpicker.min.css">
+@section jsFooter{
+<script src="/asset/admin/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<script type="text/javascript">
+    //function BrowseServer(field) {
+    //    var finder = new CKFinder();
+    //    finder.selectActionFunction = function (fileUrl) {
+    //        document.getElementById(field).value = fileUrl;
+    //        checkfile();
+    //    };
+    //    finder.popup();
+
+    //}
+    function BrowseServer(field) {
+        var finder = new CKFinder();
+        finder.selectActionFunction = function (fileUrl) {
+            document.getElementById(field).value = fileUrl;
+        };
+        finder.popup();
+    }
+</script>
+
+    <script type="text/javascript">
+        var editor1 = CKEDITOR.replace('contenteditor', {
+            customConfig: '/asset/ckeditor/config.js',
+            extraAllowedContent: 'span',
+        });
+        var editor2 = CKEDITOR.replace('txtcontact', {
+            customConfig: '/asset/ckeditor/config.js',
+            extraAllowedContent: 'span',
+        });
+        var editor3 = CKEDITOR.replace('txtpayment', {
+            customConfig: '/asset/ckeditor/config.js',
+            extraAllowedContent: 'span',
+        });
+        var editor4 = CKEDITOR.replace('txtMaps', {
+            customConfig: '/asset/ckeditor/config.js',
+            extraAllowedContent: 'span',
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('.tip-right').tooltip();
+        })
+        $(function () {
+
+            $(".select2").select2();
+        });
+    </script>
+    <script type="text/javascript">
+        $(window).ready(function () {
+            $(".my-colorpicker2").colorpicker();
+            gettingbackgroundsetting();
+            getsettingadvpopup();
+            getsettingadvleftright();
+            //đóng mở website
+            $("#drpoffweb").click(function () {
+                var value = $(this).val();
+                if (value == 1) {
+                    $("#row_notifi").show();
+                }
+                else {
+                    $("#row_notifi").hide();
+                }
+            });
+           
+            //quản lý màu nền website
+            $("#drpbackground").click(function () {
+                var value = $(this).val();
+                if (value == 'color') {
+                    $("#row-color").show();
+                    $("#row-image").hide();
+                    $("#row-image-repeat").hide();
+                    installColorPicker();
+                }
+                else if (value == 'image') {
+                    $("#row-image").show();
+                    $("#row-image-repeat").show();
+                    $("#row-color").hide();
+                }
+                else {
+                    $("#row-image").hide();
+                    $("#row-color").hide();
+                    $("#row-image-repeat").hide();
+                }
+            });
+
+            //popup
+            $("#drppopup").click(function () {
+                var value = $(this).val();
+                if (value == 'on') {
+                    $("#txtcontentpopup").show();
+                    CKEDITOR.replace('txtPopup', {
+                        customConfig: '/asset/ckeditor/config.js',
+                        extraAllowedContent: 'span',
+                    });
+
+                }
+                else if (value == 'off') {
+                    $("#txtcontentpopup").hide();
+                }
+            });
+
+            //quảng cáo hai bên
+            $("#drpadvleftright").click(function () {
+                var value = $(this).val();
+                if (value == 'on') {
+                    $("#contentadvleftright").show();
+                    CKEDITOR.replace('txtadvleft', {
+                        customConfig: '/asset/ckeditor/config.js',
+                        extraAllowedContent: 'span',
+                    });
+                    CKEDITOR.replace('txtadvright', {
+                        customConfig: '/asset/ckeditor/config.js',
+                        extraAllowedContent: 'span',
+                    });
+                }
+                else if (value == 'off') {
+                    $("#contentadvleftright").hide();
+                }
+            });
+
+        });
+
+        function installColorPicker() {
+            $("#colorpicker").ColorPicker({
+                color: '#ffffff',
+                onShow: function (colpkr) {
+                    $(colpkr).fadeIn(500);
+                    return false;
+                },
+                onHide: function (colpkr) {
+                    $(colpkr).fadeOut(500);
+                    return false;
+                },
+                onChange: function (hsb, hex, rgb) {
+                    $("#colorpicker div").css('backgroundColor', '#' + hex);
+                    $('#SettingBackgroundColor').val('#' + hex);
+                }
+            }).bind("keyup", function () {
+                $(this).ColorPickerSetColor(this.value);
+            });
+        }
+
+        function gettingbackgroundsetting() {
+            var setting = '@COMMOM.Interface.ISetting.GetSettingValue("SettingBackgroundWebsite" + lang)';
+            if (setting == 'color') {
+                $("#row-color").show();
+                $("#colorpicker div").css('backgroundColor', '@COMMOM.Interface.ISetting.GetSettingValue("SettingBackgroundColor" + lang)');
+                $('#SettingBackgroundColor').val('@COMMOM.Interface.ISetting.GetSettingValue("SettingBackgroundColor" + lang)');
+                $("#row-image").hide();
+                $("#row-image-repeat").hide();
+                installColorPicker();
+            }
+            else if (setting == 'image') {
+                $("#row-image").show();
+                $("#txtimage").val('@COMMOM.Interface.ISetting.GetSettingValue("SettingBackgroundImage" + lang)')
+                $("#row-image-repeat").show();
+                $("#row-color").hide();
+            }
+            else {
+                $("#row-image").hide();
+                $("#row-color").hide();
+                $("#row-image-repeat").hide();
+            }
+        }
+
+        function getsettingadvpopup() {
+            var setting = '@COMMOM.Interface.ISetting.GetSettingValue("SettingPopupOff" + lang)';
+            if (setting == 'on') {
+                $("#txtcontentpopup").show();
+                CKEDITOR.replace('txtPopup', {
+                    customConfig: '/asset/ckeditor/config.js',
+                    extraAllowedContent: 'span',
+                });
+            }
+            else {
+                $("#txtcontentpopup").hide();
+            }
+        }
+
+        function getsettingadvleftright() {
+            var setting = '@COMMOM.Interface.ISetting.GetSettingValue("SettingAdvLeftRight" + lang)';
+            if (setting == 'on') {
+                $("#contentadvleftright").show();
+                CKEDITOR.replace('txtadvleft', {
+                    customConfig: '/asset/ckeditor/config.js',
+                    extraAllowedContent: 'span',
+                });
+                CKEDITOR.replace('txtadvright', {
+                    customConfig: '/asset/ckeditor/config.js',
+                    extraAllowedContent: 'span',
+                });
+            }
+            else {
+                $("#contentadvleftright").hide();
+            }
+        }
+
+    </script>
+}
+<section class="content-header">
+    <h1>
+        Cấu hình website
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a href="#">Cấu hình</a></li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    @Html.Action("_SaveSetting", "Setting")
+</section><!-- /.content -->

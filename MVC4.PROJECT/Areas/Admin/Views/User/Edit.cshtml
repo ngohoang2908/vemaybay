@@ -1,0 +1,175 @@
+﻿
+@model Model.EF.UserProfile
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header">
+    <h1>
+        Sửa thành viên
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active"><a href="#">Sửa thành viên</a></li>
+
+    </ol>
+</section>
+<section class="content">
+
+    @using (Html.BeginForm("Edit", "User", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Lưu</button>
+                    <a href="#" onclick="javascript:history.go(-1);" class="btn btn-reddit">Quay lại</a>
+                </h3>
+                <div class="box-tools pull-right">
+                   
+                    @*<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>*@
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">@Html.LabelFor(m => m.UserName, new {@class = "control-label"})</label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.UserName, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.UserName)
+                        @Html.HiddenFor(m => m.UserId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">@Html.LabelFor(m => m.UserName, new {@class = "control-label"})</label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.UserName, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.UserName)
+                    </div>
+                </div>
+
+                @*<div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.Password, new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+                        @Html.PasswordFor(m => m.Password, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.Password)
+                    </div>
+                </div>*@
+                @*<div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.ConfirmPassword, new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword)
+                    </div>
+                </div>*@
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.Label("Nhóm quyền", new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+                        @{
+                            var selecteditems = new List<SelectListItem>();
+                            selecteditems = (List<SelectListItem>)ViewBag.SelectList;
+                        }
+                        @if (selecteditems.Count > 0)
+                        {
+                            <select multiple name="roles" style="width: 200px;" class="form-control select2">
+                                @foreach (var item in ViewBag.SelectList)
+                                {
+                                    if (item.Selected)
+                                    {
+                                        <option selected="selected" value="@item.Value">@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        }
+                        else
+                        {
+                            if (ViewBag.allroles != null)
+                            {
+                                <select multiple name="roles" style="width:200px;">
+                                    @foreach (var allitem in ViewBag.allroles as MultiSelectList)
+                                    {
+                                        <option value="@allitem.Value">@allitem.Text</option>
+                                    }
+                                </select>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.FullName, new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+
+                        @Html.TextBoxFor(m => m.FullName, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.FullName)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.Email, new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.Email, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.Email)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.Address, new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.Address, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.Address)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.Mobile, new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.Mobile, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.Mobile)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        <label class="control-label">@Html.LabelFor(m => m.IsLock)</label>
+                    </label>
+                    <div class="col-sm-8">
+                        @Html.CheckBoxFor(m => m.IsLock, new {@class = "flat-red"})
+                    </div>
+                </div>
+               
+            </div>
+            <div class="box-footer">
+                @*<button type="reset" class="btn btn-default">Cancel</button>*@
+                <button type="submit" class="btn btn-success">Lưu</button>
+            </div>
+        </div>
+    }
+
+</section>
+
+@section jsFooter{
+    <script src="/asset/admin/plugins/select2/select2.full.min.js"></script>
+    <script>
+        $(function () {
+            //Initialize Select2 Elements
+            $(".select2").select2();
+        });
+    </script>
+}

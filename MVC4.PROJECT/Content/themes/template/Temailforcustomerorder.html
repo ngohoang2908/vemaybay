@@ -1,0 +1,110 @@
+﻿<span style="background-color:rgb(255, 255, 255); color:rgb(34, 34, 34); font-family:arial; font-size:12px">Cảm ơn <strong>{[FullNameTitle]}</strong> đ&atilde; đặt h&agrave;ng</span>.<br />
+<span style="background-color:rgb(255, 255, 255); color:rgb(34, 34, 34); font-family:arial; font-size:12px">
+    Đơn h&agrave;ng của bạn đ&atilde; được tiếp nhận, ch&uacute;ng t&ocirc;i sẽ nhanh ch&oacute;ng li&ecirc;n hệ với bạn.<br />
+    Để kiểm tra trạng th&aacute;i đơn h&agrave;ng, bạn vui l&ograve;ng Đăng nhập v&agrave;o t&agrave;i khoản.
+</span><br />
+<span style="font-size:14px"><span style="color:rgb(178, 34, 34)"><span style="font-family:arial"><strong><span style="background-color:rgb(255, 255, 255)">Th&ocirc;ng tin người mua :</span></strong></span></span></span>
+
+<table cellpadding="1" cellspacing="1" style="border-collapse:collapse; border:0px none; width:100%">
+    <tbody>
+        <tr>
+            <td style="width:20px">&nbsp;</td>
+            <td style="width:150px; font-weight: bold">Họ t&ecirc;n</td>
+            <td style="width:5px">:</td>
+            <td>{[FullName]}</td>
+        </tr>
+        <tr>
+            <td style="width:20px">&nbsp;</td>
+            <td style="width: 150px; font-weight: bold">Điện thoại</td>
+            <td style="width:5px">:</td>
+            <td>{[Mobile]}</td>
+        </tr>
+        <tr>
+            <td style="width:20px">&nbsp;</td>
+            <td style="width:150px; font-weight: bold">Email</td>
+            <td style="width:5px">:</td>
+            <td>{Email}</td>
+        </tr>
+        <tr>
+            <td style="width:20px">&nbsp;</td>
+            <td style="width: 150px; font-weight: bold">Địa chỉ</td>
+            <td style="width:5px">:</td>
+            <td>{[Address]}</td>
+        </tr>
+        <tr>
+            <td style="width:20px">&nbsp;</td>
+            <td style="width: 150px; font-weight: bold">Ng&agrave;y tạo</td>
+            <td style="width:5px">:</td>
+            <td>{[CreatedDate]}</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+<span style="font-size:14px"><span style="color:rgb(178, 34, 34)"><strong>Th&ocirc;ng tin người nhận :</strong></span></span>
+
+<table cellpadding="1" cellspacing="1" style="border-collapse:collapse; border:0px none; width:100%">
+    <tbody>
+        <tr>
+            <td style="width:20px">&nbsp;</td>
+            <td style="width: 150px; font-weight: bold">Họ t&ecirc;n</td>
+            <td style="width:5px">:</td>
+            <td>{[FullNameRecive]}</td>
+        </tr>
+        <tr>
+            <td style="width:20px">&nbsp;</td>
+            <td style="width: 150px; font-weight: bold">Điện thoại</td>
+            <td style="width:5px">:</td>
+            <td>{[MobileRecive]}</td>
+        </tr>
+        <tr>
+            <td style="width:20px">&nbsp;</td>
+            <td style="width: 150px; font-weight: bold">Địa chỉ</td>
+            <td style="width:5px">:</td>
+            <td>{[AddressRecive]}</td>
+        </tr>
+    </tbody>
+</table>
+&nbsp;<br />
+<span style="font-size:14px"><span style="color:rgb(178, 34, 34)"><strong>Nội dung đơn h&agrave;ng : </strong></span></span>
+
+<table cellpadding="1" cellspacing="1" style="border-collapse:collapse; border:0px none; width:100%">
+    <tbody>
+        <tr>
+            <td style="width:20px">&nbsp;</td>
+            <td style="width: 150px; font-weight: bold">M&atilde; đơn h&agrave;ng</td>
+            <td style="width:5px">:</td>
+            <td>{[OrderCode]}</td>
+        </tr>
+    </tbody>
+</table>
+&nbsp;
+
+<table cellpadding="1" cellspacing="1" style="border-collapse:collapse; border:0px none; width:100%">
+    <tbody>
+        <tr>
+            <td style="font-weight: bold">Sản phẩm</td>
+            <td style="width: 120px; font-weight: bold; ">Số lượng</td>
+            <td style="width: 200px; font-weight: bold">Tổng</td>
+        </tr>
+        {[ListProduct]}
+    </tbody>
+</table>
+&nbsp;
+
+<table cellpadding="1" cellspacing="1" style="border-collapse:collapse; border:0px none; width:100%">
+    <tbody>
+        <tr>
+            <td style="width: 150px; font-weight: bold">Tổng gi&aacute; trị sản phẩm</td>
+            <td style="width:5px">:</td>
+            <td>{[Total]}</td>
+        </tr>
+        <tr>
+            <td style="width: 150px; font-weight: bold">Th&agrave;nh tiền</td>
+            <td style="width:5px">:</td>
+            <td>{[Money]}</td>
+        </tr>
+    </tbody>
+</table>
+
+<hr /> Ban quản trị website. &nbsp;
+

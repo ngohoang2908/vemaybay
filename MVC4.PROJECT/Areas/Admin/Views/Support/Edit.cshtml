@@ -1,0 +1,123 @@
+﻿@model Model.EF.CW_Support
+@{
+    ViewBag.Title = "Sửa hỗ trợ trực tuyến";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<section class="content-header">
+    <h1>
+        Sửa hỡ trợ trực tuyến
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active"><a href="#">Sửa hỡ trợ trực tuyến</a></li>
+
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Edit", "Support", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"></h3>
+                <div class="box-tools pull-right">
+
+                    <button type="submit" class="btn btn-success">Lưu lại</button>
+                    <a href="javascript:history.go(-1);" class="btn btn-reddit">Quay lại</a>
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.Title)</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.Title, new { @class = "span9", @placeholder = "Tiêu đề" })
+                            <i title="Nhập tiêu để (ví dụ: hỗ trợ kỹ thuật, hỗ trợ kinh doanh, kinh doanh 01,...)" class="fa fa-question tip-right"></i>
+                            @Html.ValidationMessageFor(m => m.Title)
+                            @Html.HiddenFor(m=>m.ID)
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.Phone)</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.Phone, new { @class = "span9", @placeholder = "Điện thoại" })
+                            <i title="Nhập điện thoại" class="fa fa-question tip-right"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.NickYahoo)</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.NickYahoo, new { @class = "span9", @placeholder = "NickYahoo" })
+                            <i title="Nhập nick yahoo" class="fa fa-question tip-right"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.NickSkyper) </label>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.NickSkyper, new { @class = "span9", @placeholder = "NickSkyper" })
+                            <i title="Nhập nick skyper" class="fa fa-question tip-right"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.Description)</label>
+                        <div class="controls">
+                            @Html.TextAreaFor(m => m.Description, new { @class = "span9", @placeholder = "Mô tả" })
+                            <i title="Nhập mô tả ngắn gọn cho người support này" class="fa fa-question tip-right"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.IsActive)</label>
+                        <div class="controls">
+                            @Html.CheckBoxFor(m => m.IsActive, new { @Checked = "Checked" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.Order)</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.Order, new { @class = "span2", @placeholder = "Thứ tự", @Value = "1" })
+                            @Html.ValidationMessageFor(m => m.Order)
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12">
+
+                    </div>
+                </div>
+                @Html.AntiForgeryToken()
+
+
+            </div>
+        </div>
+    }
+
+</section>
+
+@section jsFooter {
+    <script>
+        $(function () {
+            $('.tip-right').tooltip();
+        })
+    </script>
+}

@@ -1,0 +1,270 @@
+﻿@model Model.EF.CW_Category
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section jsFooter{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ($("#selecttypcate option:selected").val() == 'lien-ket') {
+                $("#linkcate").show();
+            }
+            $("#selecttypcate").click(function () {
+                if ($("#selecttypcate option:selected").val() == 'lien-ket') {
+                    $("#linkcate").show();
+                }
+                else {
+                    $("#linkcate").hide();
+                }
+            });
+        });
+        $(function () {
+
+            $(".select2").select2();
+        });
+        function BrowseServer(field) {
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (fileUrl) {
+                document.getElementById(field).value = fileUrl;
+            };
+            finder.popup();
+        }
+
+
+
+    </script>
+}
+<section class="content-header">
+    <h1>
+        Sửa danh mục
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a href="#">Sửa danh mục</a></li>
+
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    @using (Html.BeginForm("Edit", "Categories", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Lưu lại</button>
+                    <a href="javascript:history.go(-1);" class="btn btn-reddit"><i class="fa fa-repeat"></i> Quay lại</a>
+                </h3>
+                <div class="box-tools pull-right">
+                  
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="col-xs-12">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#activity" data-toggle="tab">Thông tin chung</a></li>
+                            <li><a href="#seo" data-toggle="tab">SEO</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="activity">
+
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.Title, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", @placeholder = "Tiều đề" })
+                                        @Html.ValidationMessageFor(m => m.Title)
+                                        @Html.HiddenFor(m => m.ID)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.Description, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @placeholder = "Mô tả" })
+                                        @Html.ValidationMessageFor(m => m.Description)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Cấp cha
+                                    </label>
+                                    <div class="col-sm-6">
+                                        @Html.DropDownListFor(x => x.ParentID, ViewBag.ListCateEdit as SelectList, "Cấp cha", new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(m => m.ParentID)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Kiểu danh mục
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.DropDownListFor(
+                                            m => m.TypeCode,
+                                            new SelectList(new List<SelectListItem>
+                                            {
+                                                new SelectListItem {Text = "Sản phẩm", Value = "san-pham"},
+                                                new SelectListItem {Text = "Tin tức", Value = "tin-tuc"},
+                                                new SelectListItem {Text = "Bài viết", Value = "bai-viet"},
+                                                new SelectListItem {Text = "File", Value = "file"},
+                                                new SelectListItem {Text = "Video clips", Value = "video"},
+                                                new SelectListItem {Text = "Thư viện ảnh", Value = "album"},
+                                                new SelectListItem {Text = "Liên kết", Value = "lien-ket"}
+                                            }, "Value", "Text"), new { @class = "form-control", @id = "selecttypcate" }
+                                            )
+                                    </div>
+                                </div>
+                                @if (Model.TypeCode.Equals("lien-ket"))
+                                {
+                                    <div class="form-group" id="linkcate">
+                                        <label class="col-sm-2 control-label">
+                                            Liên kết
+                                        </label>
+                                        <div class="col-sm-5">
+                                            @Html.TextBoxFor(m => m.Link, new { @class = "form-control", @placeholder = "Liên kết" })
+                                        </div>
+                                        <div class="col-sm-3">
+                                            @Html.DropDownListFor(
+                                                    m => m.Target,
+                                                    new SelectList(new List<SelectListItem>
+                                                    {
+                                                        new SelectListItem {Text = "Trong trang", Value = "_parent"},
+                                                        new SelectListItem {Text = "Của sổ mới", Value = "_blank"},
+
+                                                    }, "Value", "Text"), new { @class = "form-control" }
+                                                    )
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group" id="linkcate">
+                                        <label class="col-sm-2 control-label">
+                                            Liên kết
+                                        </label>
+                                        <div class="col-sm-5">
+                                            @Html.TextBoxFor(m => m.Link, new { @class = "form-control", @placeholder = "Liên kết" })
+                                        </div>
+                                        <div class="col-sm-3">
+                                            @Html.DropDownListFor(
+                                                    m => m.Target,
+                                                    new SelectList(new List<SelectListItem>
+                                                    {
+                                                        new SelectListItem {Text = "Trong trang", Value = "_parent"},
+                                                        new SelectListItem {Text = "Của sổ mới", Value = "_blank"},
+
+                                                    }, "Value", "Text"), new { @class = "form-control" }
+                                                    )
+                                        </div>
+                                    </div>
+                                }
+
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Hiện ở menu
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @if (ViewBag.SelectListItems != null)
+                                        {
+                                            <select multiple name="lstmenuedit" class="form-control select2">
+                                                @if (ViewBag.AllSelectListItems != null)
+                                                {
+
+                                                    foreach (var allitem in ViewBag.AllSelectListItems as MultiSelectList)
+                                                    {
+                                                        if (COMMOM.Interface.ISetting.CheckMenu(ViewBag.SelectListItems as List<Model.EF.CW_Menu>, allitem.Value))
+                                                        {
+                                                            <option selected value="@allitem.Value">@allitem.Text</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@allitem.Value">@allitem.Text</option>
+                                                        }
+                                                    }
+
+                                                }
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            <select multiple name="lstmenuedit" class="form-control select2">
+                                                @foreach (var allitem in ViewBag.AllSelectListItems as MultiSelectList)
+                                                {
+                                                    <option value="@allitem.Value">@allitem.Text</option>
+                                                }
+                                            </select>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Icon
+                                    </label>
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(m => m.Icon, new { @id = "txtimage", @class = "form-control", @placeholder = "Icon" })
+
+                                        @Html.ValidationMessageFor(m => m.Icon)
+
+                                    </div>
+                                    <div class="col-sm-2">
+
+                                        <input id="browseServer" class="btn" onclick="BrowseServer('txtimage');" type="button" value="Tải ảnh">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Kích hoạt
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.CheckBoxFor(m => m.IsActive, new { @Checked = "Checked" })
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="tab-pane" id="seo">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.MetaTitle, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(m => m.MetaTitle, new { @class = "form-control", @placeholder = "MetaTitle" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.MetaKeywords, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(m => m.MetaKeywords, new { @class = "form-control", @placeholder = "MetaKeywords" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.MetaDescription, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control", @placeholder = "MetaDescription" })
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                @Html.AntiForgeryToken()
+
+
+            </div>
+        </div>
+    }
+
+</section><!-- /.content -->

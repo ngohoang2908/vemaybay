@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        @ViewBag.Title
+        @{
+            string lang = Session["culture"].ToString();
+        }
+    </title>
+    <meta name="keywords" content="@ViewBag.Keywords" />
+    <meta name="description" content="@ViewBag.Description">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-language" content="@lang">
+    <link rel="alternate" href="http://www.myphamduc.somee.com/" hreflang="vi-vn" />
+
+    @*<meta name="robots" content="noindex,nofollow" />*@
+    <meta name="google-site-verification" content="xAdhCzGLwqxl0dxKZBwQXDSWPB42a9WFNVuLkhdAUAw" />
+
+
+</head>
+
+<body style="" class="home">
+
+    <!--Ket thuc nav hien thi tren mobile-->
+    @*<nav id="menu" class="hidden-lg hidden-md">
+            @Html.Action("_MenuTopMobile", "Home")
+        </nav>*@
+    <div id="pages">
+
+        <div class="container">
+            <div id="box-wapper" class="clear-fix">
+
+
+
+                @RenderBody()
+
+
+            </div>
+        </div>
+    </div>
+
+    <style>
+    </style>
+
+
+
+    <!--start slider -->
+
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="/Scripts/jquery.validate.min.js"></script>
+    <script src="/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+
+
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

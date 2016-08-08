@@ -1,0 +1,74 @@
+﻿<ul class="sidebar-menu">
+    <li class="header">@StaticResources.Resources.Category</li>
+    <li class="active">
+        <a href="/admin">
+            <i class="fa fa-home text-fuchsia"></i> <span>@StaticResources.Resources.Home</span>
+        </a>
+    </li>
+    <li class="treeview">
+        <a href="/admin/user/index">
+            <i class="fa fa-files-o text-light-blue"></i>
+            <span>@StaticResources.Resources.AccountManager</span>
+            <span class="label label-primary pull-right">0</span>
+        </a>
+
+    </li>
+    <li class="treeview">
+        <a href="/admin/setting">
+            <i class="fa fa-gears text-danger"></i> <span>@StaticResources.Resources.Setting</span> <small class="label pull-right bg-green">0</small>
+        </a>
+   
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-bar-chart text-blue"></i>
+            <span>@StaticResources.Resources.Category</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="/admin/menu"><i class="fa fa-circle-o"></i> @StaticResources.Resources.Manager menu</a></li>
+            <li><a href="/admin/categories"><i class="fa fa-circle-o"></i> @StaticResources.Resources.Manager @StaticResources.Resources.Category </a></li>           
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-newspaper-o text-aqua"></i>
+            <span>@StaticResources.Resources.Post</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">           
+            <li><a href="/admin/article"><i class="fa fa-circle-o"></i> @StaticResources.Resources.Manager @StaticResources.Resources.Post</a></li>
+            <li><a href="/admin/news"><i class="fa fa-circle-o"></i> @StaticResources.Resources.Manager @StaticResources.Resources.News</a></li>
+            @*<li><a href="/admin/file"><i class="fa fa-circle-o"></i> @StaticResources.Resources.Manager File Download</a></li>*@
+            @*<li><a href="/admin/videoclip"><i class="fa fa-circle-o"></i> @StaticResources.Resources.Manager Video</a></li>*@
+            @*<li><a href="/admin/album"><i class="fa fa-circle-o"></i> @StaticResources.Resources.Manager Album</a></li>*@
+        </ul>
+    </li>
+  
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-user text-green"></i> <span>@StaticResources.Resources.Customer</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="/admin/user/customer"><i class="fa fa-circle-o"></i> @StaticResources.Resources.Customermanagement</a></li>
+            @*<li><a href="/admin/CustomerGroups"><i class="fa fa-circle-o"></i> @StaticResources.Resources.Customergroup</a></li>*@
+            <li><a href="/admin/admincontact"><i class="fa fa-circle-o"></i> @StaticResources.Resources.ContactCustomerManagement</a></li>
+            <li><a href="/admin/email"><i class="fa fa-circle-o"></i> @StaticResources.Resources.Listofregisteredmail</a></li>
+         
+        </ul>
+    </li>
+  
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-table text-danger"></i> <span>@StaticResources.Resources.Othermanagement</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="/admin/support"><i class="fa fa-circle-o"></i> @StaticResources.Resources.SupportOnline</a></li>
+            <li><a href="/admin/adv"><i class="fa fa-circle-o"></i> @StaticResources.Resources.AdvManagement</a></li>
+            @*<li><a href="/admin/Opition"><i class="fa fa-circle-o"></i> @StaticResources.Resources.ManagementCommentwebsite</a></li>*@
+        </ul>
+    </li>
+  
+</ul>

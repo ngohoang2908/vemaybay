@@ -1,0 +1,458 @@
+﻿@{
+    ViewBag.Title = "Cấu hình website";
+    string lang = Session["language"].ToString();
+}
+@using (Ajax.BeginForm("_SaveSetting", "Setting",
+                                                            new AjaxOptions
+                                                            {
+                                                                OnSuccess = "OnSuccess",
+                                                                OnFailure = "OnFailure",
+                                                                OnBegin = "OnBegin"
+                                                            }, new { @class = "form-horizontal" }))
+{
+
+    <script>
+        function OnFailure() {
+            $.gritter.add({
+                title: 'Thông báo lỗi.',
+                text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                sticky: false,
+                class_name: 'my_class_gritter_error'
+            });
+        }
+        function OnBegin() {
+            $("#divloading").css("display", "block");
+        }
+        function OnSuccess() {
+            $("#divloading").css("display", "none");
+            $.gritter.add({
+                title: 'Thông báo thành công.',
+                text: 'Bạn đã cấu hình thông tin website thành công.',
+                sticky: false,
+                class_name: 'my_class_gritter_success'
+            });
+        }
+    </script>
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Lưu lại</button>
+            </h3>
+            <div class="box-tools pull-left">
+                @*@Html.ActionLink("Quay lại", "Index", new { @class = "btn btn-reddit" })*@
+
+                @*<a href="javascript:history.go(-1);" class="btn btn-reddit">Quay lại</a>*@
+                <div class="clear-fix"></div>
+            </div>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+            <div class="col-xs-12">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#activity" data-toggle="tab">Thông tin chung</a></li>
+                        <li><a href="#seo" data-toggle="tab">SEO</a></li>
+                        <li><a href="#thongtinlienhe" data-toggle="tab">Thông tin liên hệ</a></li>
+                        <li><a href="#tags" data-toggle="tab">Tags</a></li>
+                        <li><a href="#nhungmaps" data-toggle="tab">Nhúng bản đồ</a></li>
+                        <li><a href="#caidatgoogle" data-toggle="tab">Cài đặt google</a></li>
+                        <li><a href="#cauhinhhienthi" data-toggle="tab">Cấu hinhg hiển thị</a></li>
+                    </ul>
+                    <div id="divloading" style="display:none;text-align: center; padding:20px 0px;">
+                        <img src='/Content/themes/images/ajax-loader.gif' />
+                    </div>
+                    <div class="tab-content">
+                        <div class="active tab-pane" id="activity">
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">Tiêu đề trang</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="SettingTitle" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingTitle" + lang)" placeholder="Tiêu đề trang" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">Banner</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="SettingBanner" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingBanner" + lang)" placeholder="Banner" class="form-control" id="txtbanner" />
+                                    <span class="field-validation-error" style="display: none;" id="spanfile"></span>
+
+                                </div>
+                                <div class="col-sm-2">
+                                    <input class="btn" onclick="BrowseServer('txtbanner');" type="button" value="Tải banner">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">Logo footer</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="SettingLogo" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingLogo" + lang)" placeholder="Logo" class="form-control" id="txtLogo" />
+                                    <span class="field-validation-error" style="display: none;" id="spanfile"></span>
+
+                                </div>
+                                <div class="col-sm-2">
+                                    <input class="btn" onclick="BrowseServer('txtLogo');" type="button" value="Tải logo">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">Kích thước banner</label>
+                                <div class="col-sm-3">
+                                    <input type="text" title="Chiều rộng (ví dụ: 100px)" onkeypress="return isNumberKey(event)" name="SettingBannerWidth" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingBannerWidth" + lang)" class="form-control tip-bottom" placeholder="Chiều rộng banner">
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="text" title="Chiều cao(ví du: 200px)" onkeypress="return isNumberKey(event)" name="SettingBannerHeight" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingBannerHeight" + lang)" class="form-control tip-bottom" placeholder="Chiều cao banner">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">Favicon</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="SettingFavicon" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingFavicon" + lang)" placeholder="favicon website" class="form-control" id="txtFavicon" />
+                                </div>
+                                <div class="col-sm-2">
+                                    <input class="btn" onclick="BrowseServer('txtFavicon');" type="button" value="Tải ảnh">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="col-sm-2 control-label">Email</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="SettingEmail" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingEmail" + lang)" placeholder="Email" class="form-control" id="txtemail" />
+                                    @*<i title="Nhập email để nhận thông tin khách hàng gửi hoặc hiển thị ra website" class="icon-question-sign tip-right"></i>*@
+                                    <span class="field-validation-error" style="display: none;" id="spanemail"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Hotline" class="col-sm-2 control-label">Hotline</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="SettingHotline" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingHotline" + lang)" placeholder="Hotline" class="form-control" />
+                                    @*<i title="Nhập email để nhận thông tin khách hàng gửi hoặc hiển thị ra website" class="icon-question-sign tip-right"></i>*@
+                                    @*<span class="field-validation-error" style="display: none;" id="spanemail"></span>*@
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Fanpages" class="col-sm-2 control-label">Fanpages</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="SettingFanpage" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingFanpage" + lang)" placeholder="Fanpage" class="form-control" />
+                                    @*<i title="Nhập email để nhận thông tin khách hàng gửi hoặc hiển thị ra website" class="icon-question-sign tip-right"></i>*@
+                                    @*<span class="field-validation-error" style="display: none;" id="spanemail"></span>*@
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="infobottom" class="col-sm-2 control-label">Thông tin chân trang</label>
+                                <div class="col-sm-10">
+                                    <textarea id="contenteditor" style="height: 300px" name="SettingFooter" class="form-control">@COMMOM.Interface.ISetting.GetSettingValue("SettingFooter" + lang)</textarea>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="seo">
+                            <div class="form-group">
+                                <label for="metakey" class="col-sm-2 control-label">Meta keyword</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="SettingMetakeyword" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingMetakeyword" + lang)" placeholder="Meta keyword" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="metades" class="col-sm-2 control-label">Meta description</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="SettingMetadescription" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingMetadescription" + lang)" placeholder="Meta description" class="span10" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="thongtinlienhe">
+                            <div class="form-group">
+                                <label for="metades" class="col-sm-2 control-label">Thông tin liên hệ (Hiển thị ở trang liên hệ)</label>
+                                <div class="col-sm-10">
+                                    <textarea id="txtcontact" style="height: 300px" name="SettingContact">@COMMOM.Interface.ISetting.GetSettingValue("SettingContact" + lang)</textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="tags">
+                            <div class="form-group">
+                                <label for="tags" class="col-sm-2 control-label">Tag (Đường link hiển thị ở cuối trang web)</label>
+                                <div class="col-sm-10">
+                                    <textarea id="txtpayment" style="height: 300px" name="SettingPayment">@COMMOM.Interface.ISetting.GetSettingValue("SettingPayment" + lang)</textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="nhungmaps">
+
+                            <div class="form-group">
+                                <label for="maps" class="col-sm-2 control-label">Nhúng bản đồ (Tạo ra bản đồ ở trang liên hệ bằng mã nhúng google maps)</label>
+                                <div class="col-sm-10">
+                                    <textarea id="txtMaps" style="height: 300px" name="SettingMaps">@COMMOM.Interface.ISetting.GetSettingValue("SettingMaps" + lang)</textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="caidatgoogle">
+                            <div class="form-group">
+                                <label for="analytics" class="col-sm-2 control-label">Nhúng bản đồ (Tạo ra bản đồ ở trang liên hệ bằng mã nhúng google maps)</label>
+                                <div class="col-sm-10">
+                                    <textarea id="txtGoogleAnalytics" style="height: 200px" class="form-control" name="SettingGoogleAnalytics">@COMMOM.Interface.ISetting.GetSettingValue("SettingGoogleAnalytics" + lang)</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="webmater" class="col-sm-2 control-label">Nhúng mã Google webmaster (Giúp cho SEO)</label>
+                                <div class="col-sm-10">
+                                    <textarea id="txtGoogleWebmaster" style="height: 200px" class="form-control" name="SettingGoogleWebmaster">@COMMOM.Interface.ISetting.GetSettingValue("SettingGoogleWebmaster" + lang)</textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="cauhinhhienthi">
+                            <div class="form-group">
+                                <label for="macdinh" class="col-sm-2 control-label">Cấu hình trang mặc định</label>
+                                <div class="col-sm-5">
+                                    @if (!COMMOM.Interface.ISetting.GetSettingValue("SettingDefaultPage" + lang).Equals("nothing"))
+                                    {
+                                        <select name="SettingDefaultPage" id="SettingDefaultPage" class="select2">
+                                            @foreach (var item in ViewBag.ListCate as IEnumerable<Model.EF.CW_Category>)
+                                            {
+                                                if (item.ID == int.Parse(COMMOM.Interface.ISetting.GetSettingValue("SettingDefaultPage" + lang)))
+                                                {
+                                                    <option selected="selected" value="@item.ID">@item.Title</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.ID">@item.Title</option>
+                                                }
+                                            }
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            Không có danh mục nào !
+                                            <input type="hidden" name="SettingDefaultPage" value="nothing" />
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="close" class="col-sm-2 control-label">Đóng website</label>
+                                <div class="col-sm-10">
+                                    <select id="drpoffweb" class="span8 select2" name="SettingOffWebsite">
+                                        @if (COMMOM.Interface.ISetting.GetSettingValue("SettingOffWebsite" + lang).Equals("1"))
+                                        {
+                                            <option value="1" selected>Bật chức năng này</option>
+                                            <option value="2">Tắt chức năng này</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="1" selected>Bật chức năng này</option>
+                                            <option value="2" selected>Tắt chức năng này</option>
+                                        }
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            @if (COMMOM.Interface.ISetting.GetSettingValue("SettingOffWebsite" + lang).Equals("1"))
+                            {
+                                <div class="form-group" id="row_notifi">
+                                    <label for="notify" class="col-sm-2 control-label">Thông báo hiển thị khi đóng website</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="txtNoti" name="SettingNoticle" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingNoticle" + lang)" placeholder="Thông báo đóng website" class="form-control" />
+                                    </div>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="form-group" id="row_notifi" style="display: none">
+                                    <label for="notify" class="col-sm-2 control-label">Thông báo hiển thị khi đóng website</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="txtNoti" name="SettingNoticle" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingNoticle" + lang)" placeholder="Thông báo đóng website" class="form-control" />
+                                    </div>
+                                </div>
+
+                            }
+
+                            <div class="form-group hidden">
+                                <label for="managerweb" class="col-sm-2 control-label">Quản lý màu nền website</label>
+                                <div class="col-sm-6">
+                                    <select id="drpbackground" class="form-control" name="SettingBackgroundWebsite">
+                                        @if (COMMOM.Interface.ISetting.GetSettingCheckValue("SettingBackgroundWebsite" + lang) != null && COMMOM.Interface.ISetting.GetSettingValue("SettingBackgroundWebsite" + lang).Equals("default"))
+                                        {
+                                            <option value="default" selected="selected">Nền mặc định</option>
+                                            <option value="color">Màu nền</option>
+                                                <option value="image">Tự upload hình nền</option>
+                                        }
+                                        else if (COMMOM.Interface.ISetting.GetSettingCheckValue("SettingBackgroundWebsite" + lang) != null && COMMOM.Interface.ISetting.GetSettingValue("SettingBackgroundWebsite" + lang).Equals("color"))
+                                        {
+                                            <option value="default">Nền mặc định</option>
+                                            <option value="color" selected="selected">Màu nền</option>
+                                                <option value="image">Tự upload hình nền</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="default">Nền mặc định</option>
+                                            <option value="color">Màu nền</option>
+                                                <option value="image" selected="selected">Tự upload hình nền</option>
+                                        }
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="form-group" id="row-color" style="display: none">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Chọn màu nền</label>
+                                <div class="col-sm-4">
+                                    @*<input type="text" class="form-control" name="SettingBackgroundColor" id="SettingBackgroundColor" />*@
+                                    <div class="input-group my-colorpicker2">
+                                        <input type="text" class="form-control" name="SettingBackgroundColor" id="SettingBackgroundColor">
+                                        <div class="input-group-addon">
+                                            <i></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="col-sm-3">
+                                    <div class="colorSelector2" style="float: left; margin-right: 10px;" id="colorpicker">
+                                        <div></div>
+                                    </div>
+                                </div>*@
+                            </div>
+                            <div class="form-group" id="row-image" style="display: none">
+                                <label for="uploadimages" class="col-sm-2 control-label">Upload hình nền</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="txtimage" placeholder="Hình nền" name="SettingBackgroundImage" />
+                                    @*<input id="browseServer" class="btn" onclick="BrowseServer('txtimage');" type="button" value="Tải ảnh nền">*@
+                                </div>
+                                <div class="col-sm-2">
+                                    @*<input type="text" class="span3" id="txtimage" placeholder="Hình nền" name="SettingBackgroundImage" />*@
+                                    <input id="browseServer2" class="btn" onclick="BrowseServer('txtimage');" type="button" value="Tải ảnh nền">
+                                </div>
+                            </div>
+                            <div class="form-group" id="row-image-repeat" style="display: none">
+                                <label for="laplai" class="col-sm-2 control-label">Kiểu lặp hình nền</label>
+                                <div class="col-sm-8">
+                                    <select id="drpbackground" class="form-control" name="SettingBackgroundRepeat">
+                                        @if (COMMOM.Interface.ISetting.GetSettingCheckValue("SettingBackgroundRepeat" + lang) != null && COMMOM.Interface.ISetting.GetSettingValue("SettingBackgroundRepeat" + lang).Equals("none"))
+                                        {
+                                            <option value="none" selected="selected">None</option>
+                                            <option value="repeat">Bật repeat (lặp lại hình)</option>
+                                                <option value="fix">Hình nền cố định (không thay đổi khi kéo trang xuống dưới)</option>
+                                        }
+                                        else if (COMMOM.Interface.ISetting.GetSettingCheckValue("SettingBackgroundRepeat" + lang) != null && COMMOM.Interface.ISetting.GetSettingValue("SettingBackgroundRepeat" + lang).Equals("repeat"))
+                                        {
+                                            <option value="none">None</option>
+                                            <option value="repeat" selected="selected">Bật repeat (lặp lại hình)</option>
+                                                <option value="fix">Hình nền cố định (không thay đổi khi kéo trang xuống dưới)</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="none">None</option>
+                                            <option value="repeat">Bật repeat (lặp lại hình)</option>
+                                                <option value="fix" selected="selected">Hình nền cố định (không thay đổi khi kéo trang xuống dưới)</option>
+                                        }
+
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="form-group" style="display: none">
+                                <label for="advaaa" class="col-sm-2 control-label">Quảng cáo popup</label>
+                                <div class="col-sm-4">
+                                    <select name="SettingPopupOff" id="drppopup" class="form-control">
+                                        @if (COMMOM.Interface.ISetting.GetSettingCheckValue("SettingPopupOff" + lang) != null && COMMOM.Interface.ISetting.GetSettingValue("SettingPopupOff" + lang).Equals("off"))
+                                        {
+                                            <option value="off" selected="selected">Tắt chức năng này</option>
+                                            <option value="on">Bật chức năng này</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="off">Tắt chức năng này</option>
+                                            <option value="on" selected="selected">Bật chức năng này</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div id="txtcontentpopup">
+                                        <textarea id="txtPopup" style="height: 300px;" name="SettingPopupContent">@COMMOM.Interface.ISetting.GetSettingValue("SettingPopupContent" + lang)</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group hidden">
+                                <label for="advleftright" class="col-sm-2 control-label">Quảng cáo hai bên</label>
+                                <div class="col-sm-8">
+                                    <select name="SettingAdvLeftRight" id="drpadvleftright" class="form-control">
+                                        @if (COMMOM.Interface.ISetting.GetSettingValue("SettingAdvLeftRight" + lang).Equals("off"))
+                                        {
+                                            <option value="off" selected="selected">Tắt chức năng này</option>
+                                            <option value="on">Bật chức năng này</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="off">Tắt chức năng này</option>
+                                            <option value="on" selected="selected">Bật chức năng này</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" id="contentadvleftright">
+                                <label for="inputEmail5" class="col-sm-2 control-label">Quảng cáo bên trái</label>
+                                <div class="col-sm-5">
+                                    <textarea id="txtadvleft" style="height: 300px;" name="SettingAdvLeft">@COMMOM.Interface.ISetting.GetSettingValue("SettingAdvLeft" + lang)</textarea>
+                                </div>
+                                <div class="col-sm-5">
+                                    <textarea id="txtadvright" style="height: 300px;" name="SettingAdvRight">@COMMOM.Interface.ISetting.GetSettingValue("SettingAdvRight" + lang)</textarea>
+                                </div>
+                            </div>
+                            @*<div class="row" id="contentadvleftright">
+                                <div class="col-xs-12">
+                                    <div class="span6">
+                                        <br />
+                                        <label>Quảng cáo bên trái</label>
+                                        <textarea id="txtadvleft" style="height: 300px;" name="SettingAdvLeft">@COMMOM.Interface.ISetting.GetSettingValue("SettingAdvLeft" + lang)</textarea>
+                                    </div>
+                                    <div class="span6">
+                                        <br />
+                                        <label>Quảng cáo bên phải</label>
+                                        <textarea id="txtadvright" style="height: 300px;" name="SettingAdvRight">@COMMOM.Interface.ISetting.GetSettingValue("SettingAdvRight" + lang)</textarea>
+                                    </div>
+                                </div>
+                            </div>*@
+                            <div class="form-group hidden">
+                                <label for="binhluan" class="col-sm-2 control-label">Bình luận tin tức</label>
+                                <div class="col-sm-8">
+                                    <select name="SettingCommentNewsOff" id="drppopup" class="form-control">
+                                        @if (COMMOM.Interface.ISetting.GetSettingCheckValue("SettingCommentNewsOff" + lang) != null && COMMOM.Interface.ISetting.GetSettingValue("SettingCommentNewsOff" + lang).Equals("off"))
+                                        {
+                                            <option value="off" selected="selected">Tắt chức năng này</option>
+                                            <option value="on">Bật chức năng này</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="off">Tắt chức năng này</option>
+                                            <option value="on" selected="selected">Bật chức năng này</option>
+                                        }
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="numberlstproduct" class="col-sm-2 control-label">Số sản phẩm trên một trang (trang list sản phẩm)</label>
+                                <div class="col-sm-2">
+                                    <input type="text" name="SettingPageProduct" onkeypress="return isNumberKey(event)" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingPageProduct" + lang)" placeholder="Số sản phẩm trên một trang (trang list sản phẩm)" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="numberlstproduct1" class="col-sm-2 control-label">Số tin tức trên một trang (trang list tin tức)</label>
+                                <div class="col-sm-2">
+                                    <input type="text" name="SettingPageNews" onkeypress="return isNumberKey(event)" value="@COMMOM.Interface.ISetting.GetSettingValue("SettingPageNews" + lang)" placeholder="Số tin trên một trang (trang list tin tức)" class="form-control" />
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            @Html.AntiForgeryToken()
+
+
+        </div>
+    </div>
+}
+

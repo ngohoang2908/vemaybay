@@ -1,0 +1,72 @@
+﻿@model Model.EF.CW_CustomerGroups
+
+@{
+    ViewBag.Title = "Sửa nhóm khách hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header">
+    <h1>
+        Sửa nhóm khách hàng
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active"><a href="/admin/customergroups">Nhóm khách hàng</a></li>
+
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Edit", "CustomerGroups", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"></h3>
+                <div class="box-tools pull-right">
+                    @*@Html.ActionLink("Quay lại", "Index", new { @class = "btn btn-reddit" })*@
+                    <a href="javascript:history.go(-1);" class="btn btn-reddit">Quay lại</a>
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12">
+
+                        <label class="control-label">@Html.LabelFor(m => m.CustomerGroupName)</label>
+                        @Html.HiddenFor(m => m.CustomerGroupsID)
+                        @Html.TextBoxFor(m => m.CustomerGroupName, new { @class = "form-control", @placeholder = "Tên nhóm" })
+                        @*<i title="Nhập tiêu đề nhóm khách hàng(Ví dụ: Nhóm Vip, nhóm khách hàng lâu lăm)" class="fa fa-question tip-right" data-placement="right"></i>*@
+                        @Html.ValidationMessageFor(m => m.CustomerGroupName)
+
+
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.IsDefault)</label>
+                        @Html.CheckBoxFor(m => m.IsDefault)
+                        <i title="Lựa chọn để đặt mặc định cho nhóm khách hàng này. Khi đăng ký thành viên các khách hàng sẽ được lựa chọn vào nhóm khách hàng mặc định này." class="fa fa-question-circle tip-right" data-placement="right"></i>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12">
+                        <button type="submit" class="btn btn-success">Lưu lại</button>
+                    </div>
+                </div>
+                @Html.AntiForgeryToken()
+
+
+            </div>
+        </div>
+    }
+
+</section>
+
+@section jsFooter {
+    <script>
+        $(function () {
+            $('.tip-right').tooltip();
+        })
+    </script>
+}

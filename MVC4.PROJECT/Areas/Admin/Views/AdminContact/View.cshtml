@@ -1,0 +1,53 @@
+﻿@model Model.EF.CW_Contact
+@{
+    ViewBag.Title = "Thông tin chi tiết liên hệ";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutOut.cshtml";
+}
+
+        <div class="box">
+            <div class="content">
+                <form class="form-horizontal" method="get" action="#">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.FullName)</label>&nbsp;&nbsp;
+                        @Model.FullName
+                    </div>
+                    </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.Email)</label>
+                        &nbsp;&nbsp;
+                        @Model.Email
+                    </div>
+                    </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.Phone)</label>
+                        &nbsp;&nbsp;
+                        @Model.Phone
+                    </div>
+                    </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.Company) </label>&nbsp;&nbsp;
+
+                        @Model.Company
+                    </div>
+                    </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.Title) </label>&nbsp;&nbsp;
+
+                        @Model.Title
+                    </div>
+                    </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.Content)</label>&nbsp;&nbsp;
+
+                        @Model.Content
+                    </div>
+                    </div>
+                </form>
+            </div>
+        </div>

@@ -1,0 +1,71 @@
+﻿@model Model.EF.WebRole
+@{
+    ViewBag.Title = "Thêm quyền";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<section class="content-header">
+    <h1>
+        Thêm quyền
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active"><a href="#">Thêm quyền</a></li>
+
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Add", "Roles", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"></h3>
+                <div class="box-tools pull-right">
+                    @*@Html.ActionLink("Quay lại", "Index", new { @class = "btn btn-reddit" })*@
+                    <button type="submit" class="btn btn-success">Lưu lại</button>
+                    <a href="javascript:history.go(-1);" class="btn btn-reddit">Quay lại</a>
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.RoleName)</label>
+
+                        @Html.TextBoxFor(m => m.RoleName, new { @class = "form-control", @placeholder = "Tên nhóm" })
+                        @Html.ValidationMessageFor(m => m.RoleName)
+
+
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12">
+                        <label class="control-label">@Html.LabelFor(m => m.Description)</label>
+                        @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12">
+                        @Html.ValidationSummary(true)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        
+                    </div>
+                </div>
+                @Html.AntiForgeryToken()
+
+
+            </div>
+        </div>
+    }
+
+</section>
+
+@section jsFooter {
+
+}

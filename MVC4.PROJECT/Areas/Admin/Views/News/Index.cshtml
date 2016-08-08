@@ -1,0 +1,153 @@
+﻿@model IEnumerable<Model.EF.CW_News>
+@{
+    ViewBag.Title = "Quản lý tin tức";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    int i = 1;
+}
+
+<section class="content-header">
+    <h1>
+        Quản lý tin tức
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active"><a href="#">Tin tức</a></li>
+
+    </ol>
+</section>
+<section class="content">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        Có tất cả @if (Model != null)
+                        {
+                            <span>@Model.Count()</span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        } bản ghi
+                    </h3>
+                    <div class="text-left">
+                        <br />
+                        <a href="/admin/news/add" class="btn btn-primary"><i class="fa fa-plus"></i> Thêm mới</a>
+                        <a href="javascript:void(0)" class="btn btn-warning delete"><i class="fa fa-trash"></i> Xóa tất cả</a>
+                    </div>
+
+
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <table id="example1" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Ảnh</th>
+                                <th>Tiêu đề</th>
+                                <th>Danh mục</th>
+                                @*<th>Tin công nghệ</th>*@
+                                <th>Hiển thị</th>
+                                <th>Ng. tạo</th>
+                                <th>Thứ tự</th>
+                                <th></th>
+                                <td><input type="checkbox" id="title-checkbox" name="title-checkbox" /></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr id="trow_@item.ID">
+                                    <td>@i.ToString()</td>
+                                    <td>
+                                        @if (item.Image != null)
+                                        {
+                                            <a class="thumbnail lightbox_trigger" href="@item.Image">
+                                                <img title="Ảnh đại diện" class="imgproduct tip-top"
+                                                     src="@COMMOM.ImageTools.GetThumnail(item.Image)" style="width:30px; max-height:30px;" />
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <img alt="không có ảnh" title="Không có ảnh" class="imgproduct tip-top" src="/Content/Uploads/images/noimages.jpg" style="width:30px; max-height:30px;" />
+                                        }
+                                    </td>
+                                    <td data-id="@item.ID" id="edittitle_@item.ID">@item.Title</td>
+                                    <td><center>@item.Category.Title.Replace("--- ", "")</center></td>
+                                    @*@if (item.IsHome)
+                                    {
+                                        <td>
+                                            <center><span data-title="@item.ID" class='label label-success ishome' data-boo="@item.IsHome">V</span></center>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <center><span data-title="@item.ID" class='label label-danger ishome' data-boo="@item.IsHome">X</span></center>
+                                        </td>
+                                    }*@
+                                    @if (item.IsActive)
+                                    {
+                                        <td>
+                                            <center><span data-title="@item.ID" class='label label-success active' data-boo="@item.IsActive">V</span></center>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <center><span data-title="@item.ID" class='label label-danger active' data-boo="@item.IsActive">X</span></center>
+                                        </td>
+                                    }
+                                    <td>
+                                        @item.CreatedDate.ToShortDateString()
+                                    </td>
+                                    <td><center><input type="number" data-id="@item.ID" class="txtorder" value="@item.Order" style="width:60px;" /></center></td>
+                                    <td>
+                                        <center>
+                                            <a href="/admin/news/edit/@item.ID" class='btn btn-mini btn-primary'><i class="fa fa-edit"></i></a>
+
+                                            <a href="#" data="@item.ID" class='btn btn-mini btn-danger btndelte'><i class="fa fa-trash"></i></a>
+                                        </center>
+                                    </td>
+                                    <td style="width: 40px;"><input type="checkbox" value="@item.ID" /></td>
+                                </tr>
+                                    i = i + 1;
+                            }
+
+
+                        </tbody>
+
+                    </table>
+                   
+
+                    <div class="modal modal-danger" id="myAlert">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">Cảnh báo</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Bạn có thực sự muốn xóa bản ghi nay?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="javascript:void(0)" class="btn btn-outline pull-left closealert" data-dismiss="modal">Bỏ qua</a>
+                                    <a href="javascript:void(0)" class="btn btn-outline deleleoneitem">Đồng ý</a>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>
+@section jsFooter{
+    <script>
+        $(function () {
+            $("#example1").DataTable();
+        });
+    </script>
+    <script src="/asset/admin/js/news.js"></script>
+}

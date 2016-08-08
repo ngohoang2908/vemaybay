@@ -1,0 +1,109 @@
+﻿@model Model.EF.UserProfile
+@{
+    ViewBag.Title = "Thông tin cá nhân của bạn";
+}
+<section class="content-header">
+    <h1>
+        Thông tin cá nhân
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active"><a href="#">Thông tin cá nhân</a></li>
+
+    </ol>
+</section>
+<div id="content">
+
+    @using (Ajax.BeginForm("_ViewProfile",
+                        new AjaxOptions
+                        {
+                            OnSuccess = "OnSuccess",
+                            OnFailure = "OnFailure"
+                        }))
+    {
+        <script>
+            function OnFailure() {
+                $.gritter.add({
+                    title: 'Thông báo lỗi.',
+                    text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                    sticky: false,
+                    class_name: 'my_class_gritter_error'
+                });
+            }
+            function OnSuccess() {
+                $.gritter.add({
+                    title: 'Thông báo thành công.',
+                    text: 'Bạn vừa thay đổi thông tin cá nhân thành công!',
+                    sticky: false,
+                    class_name: 'my_class_gritter_success'
+                });
+            }
+        </script>
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"></h3>
+                <div class="box-tools pull-right">
+                    @*@Html.ActionLink("Quay lại", "Index", new { @class = "btn btn-reddit" })*@
+                    <a href="#" onclick="javascript:history.go(-1);" class="btn btn-reddit">Quay lại</a>
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        @Html.LabelFor(m => m.UserName, new { @class = "control-label" })
+
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.UserName)
+                        @Html.HiddenFor(m => m.UserId)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        @Html.LabelFor(m => m.FullName, new { @class = "control-label" })
+
+                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    
+                    <div class="col-xs-12">
+                        @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        @Html.LabelFor(m => m.Mobile, new { @class = "control-label" })
+
+                        @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        @Html.LabelFor(m => m.Address, new { @class = "control-label" })
+
+                        @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        @Html.ValidationSummary(true)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button class="btn btn-primary" type="submit">Lưu  </button>
+                    </div>
+                </div>
+                @Html.AntiForgeryToken()
+            </div>
+        </div>
+
+    }
+
+</div>

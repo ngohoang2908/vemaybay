@@ -1,0 +1,153 @@
+﻿@using System.Activities.Expressions
+@model MVC4.PROJECT.Models.RegisterModel
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<section class="content-header">
+    <h1>
+        Thêm thành viên
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active"><a href="#">Thêm thành viên</a></li>
+
+    </ol>
+</section>
+<section class="content">
+
+    @using (Html.BeginForm("Add", "User", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Lưu</button>
+                    <a href="#" onclick="javascript:history.go(-1);" class="btn btn-reddit">Quay lại</a>
+                </h3>
+                <div class="box-tools pull-right">
+                    @*@Html.ActionLink("Quay lại", "Index", new { @class = "btn btn-reddit" })*@
+                 
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="validation-group">
+                    @Html.ValidationSummary(true)
+                </div>
+                @*<div class="form-group">
+                    <label class="col-sm-2 control-label">@Html.LabelFor(m => m.UserName, new {@class = "control-label"})</label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.UserName, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.UserName)
+                    </div>
+                </div>*@
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">@Html.LabelFor(m => m.UserName, new {@class = "control-label"})</label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.UserName, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.UserName)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.Password, new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+                        @Html.PasswordFor(m => m.Password, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.Password)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.ConfirmPassword, new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.Label("Nhóm", new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+                        @Html.ListBox("roles", new MultiSelectList(
+                            (IQueryable<Model.EF.WebRole>) ViewBag.Roles,
+                            "RoleName",
+                            "RoleName", new List<string> {"Administrators"}
+                            ), new {@class = "form-control select2", @placeholder = "Select a State", @multiple = "multiple"})
+
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.UserProfile.FullName, new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+
+                        @Html.TextBoxFor(m => m.UserProfile.FullName, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.UserProfile.FullName)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.UserProfile.Email, new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.UserProfile.Email, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.UserProfile.Email)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.UserProfile.Address, new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.UserProfile.Address, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.UserProfile.Address)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.UserProfile.Mobile, new {@class = "control-label"})
+                    </label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.UserProfile.Mobile, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.UserProfile.Mobile)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        <label class="control-label">@Html.LabelFor(m => m.UserProfile.IsLock)</label>
+                    </label>
+                    <div class="col-sm-8">
+                        @Html.CheckBoxFor(m => m.UserProfile.IsLock,new {@class= "flat-red" })
+                    </div>
+                </div>
+
+                @*<button type="submit" class="btn btn-success">Lưu</button>*@
+                @Html.AntiForgeryToken()
+            </div>
+            <div class="box-footer">
+                @*<button type="reset" class="btn btn-default">Cancel</button>*@
+                <button type="submit" class="btn btn-success">Lưu</button>
+            </div>
+        </div>
+    }
+
+
+</section>
+
+@section jsFooter{
+    <script src="/asset/admin/plugins/select2/select2.full.min.js"></script>
+    <script>
+        $(function () {
+            //Initialize Select2 Elements
+            $(".select2").select2();
+        });
+    </script>
+}

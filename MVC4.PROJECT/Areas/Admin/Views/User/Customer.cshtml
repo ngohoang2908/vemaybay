@@ -1,0 +1,120 @@
+﻿@model IEnumerable<Model.EF.CW_Customers>
+@{
+    ViewBag.Title = "Quản lý khách hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    int i = 1;
+}
+<section class="content-header">
+    <h1>
+        Quản lý khách hàng
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active"><a href="#">Khách hàng</a></li>
+
+    </ol>
+</section>
+<section class="content">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        Có tất cả @if (Model != null)
+                        {
+                            <span>@Model.Count()</span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        } khách hàng
+                    </h3>
+                    <div class="text-left">
+                        <br />
+                        <a href="/admin/user/addcustomer" class="btn btn-primary"><i class="fa fa-plus"></i> Thêm mới</a>
+                        <a href="javascript:void(0)" class="btn btn-warning delete"><i class="fa fa-trash"></i> Xóa tất cả</a>
+                        <a class="btn btn-success" href="/admin/exim/exportcustomers"><i class="fa fa-file-excel-o"></i> Xuất ra excel</a>
+                    </div>
+
+
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <table id="example1" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên</th>
+                                <th>Tài khoản</th>
+                                <th>Điện thoại</th>
+                                <th>Tham gia</th>
+                                <th></th>
+                                <td><center><input type="checkbox" id="title-checkbox" name="title-checkbox" /></center></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr id="trow_@item.UserId">
+                                    <td>@i.ToString()</td>
+                                    <td>
+                                        @item.UserProfile.FullName
+                                    </td>
+                                    <td>@item.UserNameCustomer</td>
+                                    <td>
+                                        @item.UserProfile.Mobile
+                                    </td>
+                                    <td>@item.CreatedDate.ToShortDateString()</td>
+                                    <td>
+                                        <center>
+                                            <a href="/admin/user/editcustomer/@item.UserId" class='btn btn-mini btn-primary'><i class="fa fa-edit tip-right" data-placement="right" title="Sửa"> </i></a>
+                                            <a href="/admin/user/ResetPasswordCustomer/@item.UserNameCustomer" class='btn btn-mini btn-success'><i class="fa fa-houzz tip-right" title="Reset lại mật khẩu" data-placement="right"></i></a>
+                                            <a href="#" data-toggle="modal" data-target="#myAlert" data="@item.UserId" class='btn btn-mini btn-danger btndelte'><i class="fa fa-trash tip-right" title="Xóa" data-placement="right"></i></a>
+                                        </center>
+                                    </td>
+                                    <td><center><input type="checkbox" value="@item.UserId" /></center></td>
+                                </tr>
+                                i = i + 1;
+                            }
+
+
+                        </tbody>
+
+                    </table>
+
+                    <div class="modal modal-danger" id="myAlert">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">Cảnh báo</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Bạn có thực sự muốn xóa bản ghi nay?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="javascript:void(0)" class="btn btn-outline pull-left closealert" data-dismiss="modal">Bỏ qua</a>
+                                    <a href="javascript:void(0)" class="btn btn-outline deleleoneitem">Đồng ý</a>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>
+@section jsFooter{
+    <script>
+        $(function () {
+            $("#example1").DataTable();
+        });
+    </script>
+<script>
+    $(function () {
+        $('.tip-right').tooltip();
+    })
+</script>
+
+    <script src="/asset/admin/bootstrap/js/customer.js"></script>
+}

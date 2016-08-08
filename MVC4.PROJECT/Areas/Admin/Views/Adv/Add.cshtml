@@ -1,0 +1,192 @@
+﻿@model Model.EF.CW_Adv
+@{
+    ViewBag.Title = "Thêm quảng cáo";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<section class="content-header">
+    <h1>
+        Thêm quảng cáo
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active"><a href="#">Thêm quảng cáo</a></li>
+
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Add", "Adv", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Lưu lại</button>
+                    <a href="javascript:history.go(-1);" class="btn btn-reddit"><i class="fa fa-repeat"></i> Quay lại</a>
+                </h3>
+                <div class="box-tools pull-right">
+                  
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.Title, new { @class = "control-label" })
+                    </label>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", @placeholder = "Tiêu đề" })
+
+                        @Html.ValidationMessageFor(m => m.Title)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.Description, new { @class = "control-label" })
+                    </label>
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @placeholder = "Mô tả" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.Image, new { @class = "control-label" })
+                    </label>
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(m => m.Image, new {@id = "txtimage", @class = "form-control", @placeholder = "Ảnh"})
+                        @Html.ValidationMessageFor(m => m.Image)
+                    </div>
+                    <div class="col-sm-2">
+                        <input id="browseServer" class="btn" onclick="BrowseServer('txtimage');" type="button" value="Tải ảnh">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.Position, new { @class = "control-label" })
+                    </label>
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(
+                            m => m.Position,
+                            new SelectList(new List<SelectListItem>
+                            {
+                                new SelectListItem {Text = "Ảnh chạy slider trang chủ", Value = "1"},
+                                new SelectListItem {Text = "Quảng cáo cột phải", Value = "2"},
+                                new SelectListItem {Text = "Quảng cáo cột trái", Value = "3"},
+                                new SelectListItem {Text = "Logo đối tác", Value = "4"},
+                                new SelectListItem {Text = "Dưới slider trang chủ", Value = "5"},
+                                new SelectListItem {Text = "Dưới sản phẩm nổi bật", Value = "6"},
+                                new SelectListItem {Text = "Dưới sản phẩm khuyến mại", Value = "7"}
+
+                            }, "Value", "Text"), new { @class = "span4 select2" }
+                            )
+
+                        @Html.ValidationMessageFor(m => m.Position)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        <b>Kích thước</b>
+                    </label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.Width, new {@class = "form-control", @placeholder = "Chiều rộng", @onkeypress = "return isNumberKey(event)"})
+                        @Html.ValidationMessageFor(m => m.Width)
+                      
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.Height, new { @class = "form-control", @placeholder = "Chiều cao", @onkeypress = "return isNumberKey(event)" })
+                        @Html.ValidationMessageFor(m => m.Height)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.Link, new { @class = "control-label" })
+                    </label>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Link, new { @class = "form-control", @placeholder = "Liên kết" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.Target, new { @class = "control-label" })
+                    </label>
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(
+                            m => m.Target,
+                            new SelectList(new List<SelectListItem>
+                            {
+                                new SelectListItem {Text = "Trong trang", Value = "_parent"},
+                                new SelectListItem {Text = "Trang mới", Value = "_blank"},
+                                //new SelectListItem{ Text="Quảng cáo trang chủ dưới mẫu bán chạy", Value = "3" }
+                            }, "Value", "Text"), new { @class = "form-control select2" }
+                            )
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.IsActive, new { @class = "control-label" })
+                    </label>
+                    <div class="col-sm-10">
+                        @Html.CheckBoxFor(m => m.IsActive, new { @Checked = "Checked" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        @Html.LabelFor(m => m.Order, new { @class = "control-label" })
+                    </label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(m => m.Order, new { @class = "form-control", @placeholder = "Thứ tự", @Value = "1" })
+                        @*<i title="Ghi số để sắp xếp thứ tự hiển thị bài viết này với những bài viết khác" class="icon-question-sign tip-right"></i>*@
+                        @Html.ValidationMessageFor(m => m.Order)
+                    </div>
+                </div>
+                
+             
+              
+            </div>
+
+            @Html.AntiForgeryToken()
+        </div>
+      
+    }
+
+</section>
+
+@section jsFooter {
+<script type="text/javascript">
+    function BrowseServer(field) {
+        var finder = new CKFinder();
+        finder.selectActionFunction = function (fileUrl) {
+            document.getElementById(field).value = fileUrl;
+        };
+        finder.popup();
+    }
+</script>
+
+    <script>
+        $(function () {
+            $('.tip-right').tooltip();
+            $('.select2').select2();
+        })
+    </script>
+    <script type="text/javascript">
+        $(window).ready(function () {
+            $("#Width").val("870");
+            $("#Height").val("368");
+            $("#Position").click(function () {
+                var id = $("#Position option:selected").val();
+                if (id == 1) {
+                    $("#Width").val("870");
+                    $("#Height").val("368");
+                }
+                else if (id == 2) {
+                    $("#Width").val("263");
+                    $("#Height").val("430");
+                }
+                else if (id == 3) {
+                    $("#Width").val("137");
+                    $("#Height").val("50");
+                }
+            });
+        });
+    </script>
+}

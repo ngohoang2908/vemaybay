@@ -1,0 +1,301 @@
+﻿@{
+    ViewBag.Title = "Quản lý menu";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Quản lý danh mục
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a href="/admin/menu/index/@ViewBag.menucode">Quản lý @ViewBag.menutitle</a></li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    @Html.Action("_ListCateByMenu", "Menu", new { menucode = ViewBag.menucode })
+</section><!-- /.content -->
+@section jsFooter{
+    <script type="text/javascript">
+        function rendertreetableselect() {
+            var tr_template = "";
+            tr_template = "<tr data-tt-id='{{ID}}' {{Parent}}> ";
+            tr_template += "  <td><span class='{{Class}}'>{{Title}}</span></td>";//cột tiêu đề
+
+            tr_template += "  <td><center><input type='checkbox' value='{{ID}}' class='checkbox' {{Checked}}/></center></td>";//checkbox
+            tr_template += "  </tr>";
+
+            $.getJSON('/api/menuapi/jtreetableaddcate?select=', { menucode: '@ViewBag.menucode', lang: '@Session["language"].ToString()' }).done(function (data) {
+                var html = "";
+                $.each(data, function (i, item) {
+                    var id = item.ID;
+                    var title = item.Title;
+                    var haschild = item.HasChild;
+                    var parent = item.Parent;
+                    var order = item.SortOrder;
+                    var temp = tr_template.replace("{{ID}}", id).replace("{{ID}}", id).replace("{{Title}}", title);
+                    if (parent != null) {
+                        temp = temp.replace("{{Parent}}", "data-tt-parent-id='" + parent + "'");
+                    } else {
+                        temp = temp.replace("{{Parent}}", "");
+                    }
+                    if (item.selectedcate) {
+                        temp = temp.replace("{{Checked}}", "checked='checked'");
+                    }
+
+                    if (haschild) {
+                        temp = temp.replace("{{Class}}", "folder");
+                    } else {
+                        temp = temp.replace("{{Class}}", "file");
+                    }
+
+
+                    html += temp;
+
+                });
+                var table = "";
+                table += "<table id=\"treetableselect\">";
+                table += "    <thead><tr>";
+                table += "         <th>Tiêu đề</th>";
+                table += "         <th><center><input type='checkbox' id='selectallcate'/></center></th>";
+                table += "    </tr></thead>";
+                table += "    <tbody>" + html + "</tbody>";
+                table += "</table>";
+                $('#selectcate').html(table);
+                $("#treetableselect").treetable({ expandable: true });
+                $("#treetableselect tbody tr").mousedown(function () {
+                    $("tr.selected").removeClass("selected");
+                    $(this).addClass("selected");
+                });
+                $('#treetableselect').treetable('expandAll');
+            });
+        }
+
+        //hàm dùng cho việc hiển thị danh sách danh mục
+        function rendertreetable() {
+
+            //$('.progress-striped').css('display', 'block');
+            var strhtml = "<div style='text-align: center; padding: 20px 0px;'><img src='/Content/themes/images/ajax-loader.gif' /></div>";
+            $('#grid').html(strhtml);
+            var tr_template = "";
+            tr_template = "<tr data-tt-id='{{ID}}' {{Parent}}> ";
+            tr_template += "  <td><span class='{{Class}}'>{{Title}}</span></td>";//cột tiêu đề
+            //tr_template += "  <td>{{MetaTitle}}</td>";//cột metatitle
+            tr_template += "  <td><center><input type='text' data='{{ID}}' style='color:#000;width: 60px; height: 20px;margin-bottom:2px' value='{{Order}}' /></center></td>";//status
+            tr_template += "  <td> <center>";
+            tr_template += "     <a href='javascript:void(0)' data='{{ID}}' class='btn btnview btn-danger btndelte'> Xóa khỏi menu</a></center>";
+            tr_template += "  </td>";
+            //tr_template += "  <td><center><input type='checkbox' value='{{ID}}'/></center></td>";//checkbox
+            tr_template += "  </tr>";
+
+            $.getJSON('/Api/CategoriesApi/jtreetablebymenu?select=', { menucode: '@ViewBag.menucode', lang: '@Session["language"].ToString()' }).done(function (data) {
+                var html = "";
+                $.each(data, function (i, item) {
+                    var id = item.ID;
+                    var title = item.Title;
+                    //var metatitle = item.MetaTitle != null ? item.MetaTitle : "";
+                    var haschild = item.HasChild;
+                    var parent = item.Parent;
+                    var order = item.SortOrder;
+                    //alert(IsActive);
+                    var temp = tr_template.replace("{{ID}}", id).replace("{{ID}}", id).replace("{{ID}}", id).replace("{{ID}}", id).replace("{{Title}}", title).replace("{{Order}}", order);
+                    if (parent != null) {
+                        temp = temp.replace("{{Parent}}", "data-tt-parent-id='" + parent + "'");
+                    } else {
+                        temp = temp.replace("{{Parent}}", "");
+                    }
+                    //if (IsActive) {
+                    //    temp = temp.replace("{{IsActive}}", "<span data='" + id + "," + IsActive + "' class='label label-success active'>V</span>");
+                    //}
+                    //else {
+                    //    temp = temp.replace("{{IsActive}}", "<span data='" + id + "," + IsActive + "' class='label label-info active'>X</span>");
+                    //}
+                    if (haschild) {
+                        temp = temp.replace("{{Class}}", "folder");
+                    } else {
+                        temp = temp.replace("{{Class}}", "file");
+                    }
+                    html += temp;
+
+                });
+                var table = "";
+                table += "<table id=\"treetable\">";
+                table += "    <thead><tr>";
+                table += "         <th>Tiêu đề</th>";
+                //table += "         <th>MetaTitle</th>";
+                table += "         <th style='width:90px; text-align:center;'><a href='javascript:void(0)' class='btn btnview btn-info' id='btnupdateorder'>Sắp xếp</a></th>";
+                table += "         <th style='width:110px;'></th>";
+                //table += "         <th><center><input type='checkbox' id='selectall' /></center></th>";
+                table += "    </tr></thead>";
+                table += "    <tbody>" + html + "</tbody>";
+                table += "</table>";
+                $('#grid').html(table);
+                $("#treetable").treetable({ expandable: true });
+                $("#treetable tbody tr").mousedown(function () {
+                    $("tr.selected").removeClass("selected");
+                    $(this).addClass("selected");
+                });
+                jQuery('#treetable').treetable('expandAll');
+            });
+        }
+
+
+        //check all
+        $(document).on('change', '#selectallcate', function (event) {
+            //var checkedStatus = this.checked;
+            //var checkbox = $(this).parents('.widget-content').find('tr td input:checkbox');
+            //checkbox.each(function () {
+            if ($(this).is(':checked')) {
+                $(".checkbox").attr("checked", true);
+            } else {
+                $(".checkbox").attr("checked", false);
+            }
+
+            //});
+        });
+        //Xóa menu
+        $(document).on("click", '.btndelte', function (event) {
+            var cf = confirm("Bạn có thực sự muốn xóa!");
+            //alert('day roi');
+            if (cf) {
+                var _id = $(this).attr('data');
+                var _menu = '@ViewBag.menucode';
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: '/Admin/Menu/DeleteItem',
+                        data: { item: _id, menu: _menu }
+                    })
+                    .done(function () {
+                        rendertreetable();
+                        $.gritter.add({
+                            title: 'Thông báo.',
+                            text: 'Xóa thành công.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_success'
+                        });
+                    })
+                    .fail(function () {
+                        $.gritter.add({
+                            title: 'Thông báo lỗi.',
+                            text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_error'
+                        });
+                    });
+            }
+        });
+
+        //sắp xếp
+        $(document).on("click", '#btnupdateorder', function (event) {
+            var input = $("#treetable").find('tr td input:text');
+            input.each(function () {
+                var _order = $(this).val();
+                var _id = $(this).attr('data');
+                var _menu = '@ViewBag.menucode';
+                $.ajax(
+                  {
+                      type: "POST",
+                      beforeSend: function () {
+                          $("#loading").show();
+                      },
+                      url: '/admin/Menu/UpdateOrder',
+                      data: { item: _id, order: _order, menu: _menu }
+                  })
+                .done(function () {
+                    rendertreetable();
+                    $("#loading").hide();
+                    //$.gritter.add({
+                    //    title: 'Thông báo.',
+                    //    text: 'Update thứ tự thành công.',
+                    //    sticky: false,
+                    //    class_name: 'my_class_gritter_success'
+                    //});
+                })
+                .fail(function () {
+                    $.gritter.add({
+                        title: 'Thông báo lỗi.',
+                        text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                        sticky: false,
+                        class_name: 'my_class_gritter_error'
+                    });
+                });
+            });
+            rendertreetable();
+        });
+       
+
+
+       
+        $(document).ready(function () {
+            rendertreetable();
+            $("#btnpopup").click(function () {
+                rendertreetableselect();
+                $("#dialog").dialog({
+                    autoOpen: false,
+                    show: "fade",
+                    hide: "fade",
+                    modal: true,
+                    height: '500',
+                    width: '700',
+                    resizable: true,
+                    title: 'Thêm nhiều danh mục vào @ViewBag.menutitle'
+                });
+                $('#dialog').dialog('open');
+                return false;
+            });
+
+            $('#cmdok').click(function () {
+                var input = $("#treetableselect").find('tr td input:checkbox');
+                input.each(function () {
+                    var _categoryid = $(this).val();
+                    if ($(this).is(':checked')) {
+                        //var check = $(this).attr('checked', false);
+                        //thêm những danh mục được chọn
+                        //console.log("ID duoc chon them: "+_categoryid +"-"+check);
+                        $.ajax(
+                      {
+                          type: "POST",
+                          url: '@Url.Action("AddCate", "Menu")',
+                          data: { menucode: '@ViewBag.menucode', categoryid: _categoryid }
+                      })
+                             .done(function () {
+                                 rendertreetable();
+                                
+                            })
+                    .fail(function () {
+                        alert("cố lỗi xảy ra!!");
+                    });
+                    }
+                    else {
+                        //xóa những danh mục không được chọn
+                        $.ajax(
+                            {
+                                type: "POST",
+                                url: '@Url.Action("DeleteItem", "Menu")',
+                                data: { item: _categoryid, menu: '@ViewBag.menucode' }
+                            })
+                            .done(function () {
+                                rendertreetable();
+                                
+                            })
+                            .fail(function () {
+                                $.gritter.add({
+                                    title: 'Thông báo lỗi.',
+                                    text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                                    sticky: false,
+                                    class_name: 'my_class_gritter_error'
+                                });
+                            });
+                    }
+                });
+                //rendertreetable();
+                $('#dialog').dialog('close');
+            });
+        });
+
+
+    </script>
+}

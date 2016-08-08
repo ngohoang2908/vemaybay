@@ -1,0 +1,101 @@
+﻿@model MVC4.PROJECT.Models.LocalPasswordModel
+@{
+    ViewBag.Title = "Thay đổi mật khẩu của bạn";
+}
+
+<section class="content-header">
+    <h1>
+        Thay đổi mật khẩu
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active"><a href="#">Thay đổi mật khẩu</a></li>
+
+    </ol>
+</section>
+<section class="content">
+
+
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title"></h3>
+            <div class="box-tools pull-right">
+                @*@Html.ActionLink("Quay lại", "Index", new { @class = "btn btn-reddit" })*@
+                <a href="#" onclick="javascript:history.go(-1);" class="btn btn-reddit">Quay lại</a>
+            </div>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+            @using (Ajax.BeginForm("_ChangePassCurrentUserName",
+                        new AjaxOptions
+                        {
+                            OnSuccess = "OnSuccess",
+                            OnFailure = "OnFailure"
+                        }))
+            {
+                <script>
+                    function OnFailure() {
+                        $.gritter.add({
+                            title: 'Thông báo lỗi.',
+                            text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_error'
+                        });
+                    }
+                    function OnSuccess() {
+                        $.gritter.add({
+                            title: 'Thông báo thành công.',
+                            text: 'Bạn vừa thay đổi mật khẩu thành công.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_green'
+                        });
+
+                    }
+                </script>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label name="usernameok" title="Tài khoản" class="control-label">Tài khoản</label>
+
+                        <input type="text" value="@WebSecurity.CurrentUserName" name="username" class="form-control" readonly="readonly" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        @Html.LabelFor(m => m.OldPassword, new { @class = "control-label" })
+
+                        @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.OldPassword)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        @Html.LabelFor(m => m.NewPassword, new { @class = "control-label" })
+
+                        @Html.PasswordFor(m => m.NewPassword, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.NewPassword)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
+
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button class="btn btn-primary" type="submit">Lưu  </button>
+                        @*<a class="btn" type="submit" href="/admin/user">Quay lại  </a>*@
+                    </div>
+                </div>
+                @Html.AntiForgeryToken()
+
+
+            }
+        </div>
+    </div>
+
+
+
+</section>

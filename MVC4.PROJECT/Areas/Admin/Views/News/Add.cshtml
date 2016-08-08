@@ -1,0 +1,195 @@
+﻿@model Model.EF.CW_News
+@{
+    ViewBag.Title = "Thêm tin tức";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header">
+    <h1>
+        Thêm tin tức
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active"><a href="#">Thêm nhóm khách hàng</a></li>
+
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Add", "News", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Lưu lại</button>
+                    <a href="javascript:history.go(-1);" class="btn btn-reddit"><i class="fa fa-repeat"></i> Quay lại</a>
+                </h3>
+                <div class="box-tools pull-right">
+                    @*@Html.ActionLink("Quay lại", "Index", new { @class = "btn btn-reddit" })*@
+                 
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="col-xs-12">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#activity" data-toggle="tab">Thông tin chung</a></li>
+                            <li><a href="#seo" data-toggle="tab">SEO</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="activity">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.Title, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", @placeholder = "Tiêu đề" })
+                                        @*<i title="Nhập tiêu đề tin (ví dụ: Việt nam mua 6 tàu ngầm của Nga)" class="icon-question-sign tip-right"></i>*@
+                                        @Html.ValidationMessageFor(m => m.Title)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.Description, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-10">
+                                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @placeholder = "Mô tả" })
+                                        @*<i title="Viết mô tả ngắn gọn cho tin này" class="icon-question-sign tip-right"></i>*@
+                                        @Html.ValidationMessageFor(m => m.Description)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.CategoryID, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-5">
+                                        @Html.DropDownListFor(x => x.CategoryID, ViewBag.Select as SelectList, new { @class = "form-control select2" })
+                                        @*<i title="Hãy chọn một danh mục chứa tin này" class="icon-question-sign tip-right"></i>*@
+                                        @Html.ValidationMessageFor(m => m.CategoryID)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.Image, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(m => m.Image, new {@id = "txtimage", @class = "form-control", @placeholder = "Ảnh đại diện"})
+                                        @Html.ValidationMessageFor(m => m.Image)
+                                     
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input id="browseServer" class="btn" onclick="BrowseServer('txtimage');" type="button" value="Tải ảnh">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.ImageNotes)
+                                    </label>
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(m => m.ImageNotes, new { @class = "form-control", @placeholder = "Chú thích ảnh" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.Content, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-10">
+                                        @Html.TextAreaFor(m => m.Content, new { @class = "", @id = "contenteditor", @style = "height:600px" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.IsActive, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-10">
+                                        @Html.CheckBoxFor(m => m.IsActive, new { @Checked = "Checked" })
+                                    </div>
+                                </div>
+                               
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Trang chủ
+                                    </label>
+                                    <div class="col-sm-10">
+                                        @Html.CheckBoxFor(m => m.IsHome)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.Order, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-3">
+                                        @Html.TextBoxFor(m => m.Order, new { @class = "form-control", @placeholder = "Thứ tự", @Value = "1" })
+                                    </div>
+                                </div>
+                              
+                            </div>
+                            <div class="tab-pane" id="seo">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.MetaTitle, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(m => m.MetaTitle, new { @class = "form-control", @placeholder = "MetaTitle" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.MetaKeywords, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(m => m.MetaKeywords, new { @class = "form-control", @placeholder = "MetaKeywords" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.MetaDescription, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-10">
+                                        @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control", @placeholder = "MetaDescription" })
+                                    </div>
+                                </div>
+
+                           
+                               
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                @Html.AntiForgeryToken()
+
+
+            </div>
+        </div>
+    }
+
+</section>
+
+@section jsFooter {
+
+    <script type="text/javascript">
+        var editor = CKEDITOR.replace('contenteditor', {
+            customConfig: '/asset/ckeditor/config.js',
+            extraAllowedContent: 'span',
+        });
+    </script>
+    <script type="text/javascript">
+        function BrowseServer(field) {
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (fileUrl) {
+                document.getElementById(field).value = fileUrl;
+            };
+            finder.popup();
+        }
+        $(function () {
+
+            $(".select2").select2();
+        });
+    </script>
+   
+}
+
+

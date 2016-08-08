@@ -1,0 +1,73 @@
+﻿@model MVC4.PROJECT.Models.LoginModel
+@{
+    ViewBag.Title = "Đăng nhập";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12 col-xs-12">
+        <div class="breadcrumb">
+            <div class="breadcrumb-inner">
+                <ul class="list-inline list-unstyled">
+                    <li><a href="/" title="Trang chủ">Trang chủ</a> <i class="fa fa-angle-double-right"></i></li>
+                    <li class="active">Đăng nhập/Đăng ký</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="product-area mbottom-30">
+
+    <div class="row">
+
+        <!-- Ket thuc left-->
+        <div class="box-left col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 sign-in">
+                    <h4 class="checkout-subtitle">Đăng nhập</h4>
+                    <p class="">Nếu đã có tài khoản, hãy đăng nhập ở dưới.</p>
+                    <div class="register-form outer-top-xs">
+                        @using (Html.BeginForm("Login", "Account", new {returnUrl = ViewBag.ReturnUrl}))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="validation-group bottom-2">
+                                @Html.ValidationSummary(true)
+                            </div>
+                            <div class="form-group">
+                                <label class="info-title" for="exampleInputEmail1">
+                                    Tài khoản (Email)
+                                    <span>*</span>
+                                </label>
+
+                                @Html.TextBoxFor(m => m.UserName, new {@class = "form-control unicase-form-control text-input"})
+                                @Html.ValidationMessageFor(m => m.UserName)
+                            </div>
+                            <div class="form-group">
+                                <label class="info-title" for="exampleInputPassword1">
+                                    Mật khẩu
+                                    <span>*</span>
+                                </label>
+
+                                @Html.PasswordFor(m => m.Password, new {@class = "form-control unicase-form-control text-input"})
+                                @Html.ValidationMessageFor(m => m.Password)
+                            </div>
+                            <div class="checkbox outer-xs">
+                                <label>
+                                    <input type="checkbox" name="RememberMe" value="True" checked>
+                                    Ghi nhớ đăng nhập !
+                                </label>
+                                <a class="forgot-password pull-right" href="/account/sendpassword">Bạn quên mật khẩu?</a>
+                            </div>
+                            <button class="btn-upper btn btn-primary checkout-page-button" type="submit">Đăng nhập</button>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 create-new-account">
+                    @Html.Action("_RegisterModule", "Account")
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

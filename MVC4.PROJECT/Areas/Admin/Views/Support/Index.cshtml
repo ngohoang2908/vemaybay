@@ -1,0 +1,366 @@
+﻿@model IEnumerable<Model.EF.CW_Support>
+@{
+    ViewBag.Title = "QUản lý hỗ trợ trực tuyến";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    int i = 1;
+}
+
+<section class="content-header">
+    <h1>
+        Quản lý hỗ trợ trực tuyến
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a href="#">Hỗ trợ trực tuyến</a></li>
+
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">
+                Có tất cả @if (Model != null)
+                {
+                    <span>@Model.Count()</span>
+                }
+                else
+                {
+                    <span>0</span>
+                } bài viết
+            </h3>
+            <div class="text-left">
+                <br />
+                <a href="/admin/support/add" class="btn btn-primary"><i class="fa fa-plus"></i> Thêm mới</a>
+                <a href="javascript:void(0)" class="btn btn-warning delete"><i class="fa fa-trash"></i> Xóa tất cả</a>
+            </div>
+
+
+        </div><!-- /.box-header -->
+        <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="width:20px;">STT</th>
+                        <th>Tên</th>
+                        <th>Số điện thoại</th>
+                        <th>NickYahoo</th>
+                        <th>NickSkyper</th>
+                        <th>Hiển thị</th>
+                        <th>Thứ tự</th>
+                        <th width="100px"></th>
+                        <th>
+                            <input type="checkbox" id="title-checkbox" name="title-checkbox" />
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr id="trow_@item.ID">
+                            <th style="text-align:center">@i.ToString()</th>
+                            <td data-id="@item.ID" id="edittitle_@item.ID">@item.Title</td>
+                            <td style="text-align:center" data-id="@item.ID" id="editphone_@item.ID">@item.Phone</td>
+                            <td style="text-align:center" id="edityahoo_@item.ID" data-id="@item.ID">@item.NickYahoo</td>
+                            <td style="text-align:center" data-id="@item.ID" id="editskyper_@item.ID">
+                                @item.NickSkyper
+                            </td>
+                            @if (item.IsActive)
+                            {
+                                <td>
+                                    <center><span data-title="@item.ID" class='label label-success active' data-boo="@item.IsActive">V</span></center>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <center><span data-title="@item.ID" class='label label-danger active' data-boo="@item.IsActive">X</span></center>
+                                </td>
+                            }
+                            <td>
+                                <center><input type="text" data-id="@item.ID" class="txtorder" value="@item.Order" style="width:30px;" /></center>
+                            </td>
+                            <td>
+                                <center>
+                                    <a href="/admin/support/edit/@item.ID" class='btn btn-mini btn-primary'><i class="fa fa-edit"></i></a>
+
+                                    <a href="#" data-toggle="modal" data-target="#myAlert" data="@item.ID" class='btn btn-mini btn-danger btndelte'><i class="fa fa-trash"></i></a>
+                                </center>
+                            </td>
+                            <td><center><input type="checkbox" value="@item.ID" /></center></td>
+                            
+                        </tr>
+                            i = i + 1;
+                    }
+
+
+                </tbody>
+
+            </table>
+
+
+            <div class="modal modal-danger" id="myAlert">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Cảnh báo</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Bạn có thực sự muốn xóa bản ghi nay?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="javascript:void(0)" class="btn btn-outline pull-left closealert" data-dismiss="modal">Bỏ qua</a>
+                            <a href="javascript:void(0)" class="btn btn-outline deleleoneitem">Đồng ý</a>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+</section><!-- /.content -->
+@section jsFooter{
+
+    <script>
+        $(function () {
+            $("#example1").DataTable();
+        });
+        //update điện thoại
+        function updatephone(currentEle, value, idpro) {
+            $(currentEle).html('<input class="thValphone" style="width: 100px;" type="text" value="' + value.trim() + '" />');
+            $(".thValphone").focus();
+            $(".thValphone").keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $.ajax(
+                        {
+                            type: "POST",
+                            url: '@Url.Action("UpdatePhone", "Support")',
+                            data: { id: idpro, phone: $(".thValphone").val().trim() }
+                        })
+                    .done(function () {
+                        $(currentEle).html($(".thValphone").val().trim());
+                        $.gritter.add({
+                            title: 'Thông báo thành công.',
+                            text: 'Bạn đã cập nhật số điện thoại thành công.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_success'
+                        });
+                    })
+                    .fail(function () {
+                        $.gritter.add({
+                            title: 'Thông báo lỗi.',
+                            text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_error'
+                        });
+                    })
+                }
+            });
+
+            $(".thValphone").focusout(function () {
+                $.ajax(
+                         {
+                             type: "POST",
+                             url: '@Url.Action("UpdatePhone", "Support")',
+                             data: { id: idpro, phone: $(".thValphone").val().trim() }
+                         })
+
+                     .done(function () {
+                         $(currentEle).html($(".thValphone").val().trim());
+                         $.gritter.add({
+                             title: 'Thông báo thành công.',
+                             text: 'Bạn đã cập nhật số điện thoại thành công.',
+                             sticky: false,
+                             class_name: 'my_class_gritter_success'
+                         });
+                     })
+                     .fail(function () {
+                         $.gritter.add({
+                             title: 'Thông báo lỗi.',
+                             text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                             sticky: false,
+                             class_name: 'my_class_gritter_error'
+                         });
+                     })
+            });
+        }
+
+        //update yahoo
+        function updatenickyahoo(currentEle, value, idpro) {
+            $(currentEle).html('<input class="thValyahoo" style="width: 100px;" type="text" value="' + value.trim() + '" />');
+            $(".thValyahoo").focus();
+            $(".thValyahoo").keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $.ajax(
+                        {
+                            type: "POST",
+                            url: '@Url.Action("UpdateNikyahoo", "Support")',
+                            data: { id: idpro, yahoo: $(".thValyahoo").val().trim() }
+                        })
+                    .done(function () {
+                        $(currentEle).html($(".thValyahoo").val().trim());
+                        $.gritter.add({
+                            title: 'Thông báo thành công.',
+                            text: 'Bạn đã cập nhật nick yahoo thành công.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_success'
+                        });
+                    })
+                    .fail(function () {
+                        $.gritter.add({
+                            title: 'Thông báo lỗi.',
+                            text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_error'
+                        });
+                    })
+                }
+            });
+
+            $(".thValyahoo").focusout(function () {
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: '@Url.Action("UpdateNikyahoo", "Support")',
+                        data: { id: idpro, yahoo: $(".thValyahoo").val().trim() }
+                    })
+                    .done(function () {
+                        $(currentEle).html($(".thValyahoo").val().trim());
+                        $.gritter.add({
+                            title: 'Thông báo thành công.',
+                            text: 'Bạn đã cập nhật nick yahoo thành công.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_success'
+                        });
+                    })
+                    .fail(function () {
+                        $.gritter.add({
+                            title: 'Thông báo lỗi.',
+                            text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_error'
+                        });
+                    });
+            });
+        }
+        //update nickskyper
+        function updatenickskyper(currentEle, value, idpro) {
+            $(currentEle).html('<input class="thValskyper" style="width: 100px;" type="text" value="' + value.trim() + '" />');
+            $(".thValskyper").focus();
+            $(".thValskyper").keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $.ajax(
+                        {
+                            type: "POST",
+                            url: '@Url.Action("UpdateNikskyper", "Support")',
+                            data: { id: idpro, skyper: $(".thValskyper").val().trim() }
+                        })
+                    .done(function () {
+                        $(currentEle).html($(".thValskyper").val().trim());
+                        $.gritter.add({
+                            title: 'Thông báo thành công.',
+                            text: 'Bạn đã cập nhật nick skyper thành công.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_success'
+                        });
+                    })
+                    .fail(function () {
+                        $.gritter.add({
+                            title: 'Thông báo lỗi.',
+                            text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_error'
+                        });
+                    })
+                }
+            });
+
+            $(".thValskyper").focusout(function () {
+                $.ajax(
+                         {
+                             type: "POST",
+                             url: '@Url.Action("UpdateNikskyper", "Support")',
+                             data: { id: idpro, skyper: $(".thValskyper").val().trim() }
+                         })
+
+                     .done(function () {
+                         $(currentEle).html($(".thValskyper").val().trim());
+                         $.gritter.add({
+                             title: 'Thông báo thành công.',
+                             text: 'Bạn đã cập nhật nick skyper thành công.',
+                             sticky: false,
+                             class_name: 'my_class_gritter_success'
+                         });
+                     })
+                     .fail(function () {
+                         $.gritter.add({
+                             title: 'Thông báo lỗi.',
+                             text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                             sticky: false,
+                             class_name: 'my_class_gritter_error'
+                         });
+                     })
+            });
+        }
+        //update tiêu đề hỗ trợ trực tuyến
+        function updateVal(currentEle, value, idpro) {
+            $(currentEle).html('<input class="thVal" type="text" value="' + value.trim() + '" />');
+            $(".thVal").focus();
+            $(".thVal").keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $.ajax(
+                        {
+                            type: "POST",
+                            url: '@Url.Action("UpdateTitle", "Support")',
+                            data: { id: idpro, title: $(".thVal").val().trim() }
+                        })
+                        .done(function() {
+                            $(currentEle).html($(".thVal").val().trim());
+                            $.gritter.add({
+                                title: 'Thông báo thành công.',
+                                text: 'Bạn đã cập nhật tiêu đề thành công.',
+                                sticky: false,
+                                class_name: 'my_class_gritter_success'
+                            });
+                        })
+                        .fail(function() {
+                            $.gritter.add({
+                                title: 'Thông báo lỗi.',
+                                text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                                sticky: false,
+                                class_name: 'my_class_gritter_error'
+                            });
+                        });
+                }
+            });
+
+            $(".thVal").focusout(function () {
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: '@Url.Action("UpdateTitle", "Support")',
+                        data: { id: idpro, title: $(".thVal").val().trim() }
+                    })
+                    .done(function () {
+                        $(currentEle).html($(".thVal").val().trim());
+                        $.gritter.add({
+                            title: 'Thông báo thành công.',
+                            text: 'Bạn đã cập nhật tiêu đề thành công.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_success'
+                        });
+                    })
+                    .fail(function () {
+                        $.gritter.add({
+                            title: 'Thông báo lỗi.',
+                            text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_error'
+                        });
+                    });
+            });
+        }
+    </script>
+    <script src="/asset/admin/js/support.js"></script>
+}

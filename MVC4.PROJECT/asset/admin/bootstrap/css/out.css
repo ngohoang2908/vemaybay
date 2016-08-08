@@ -1,0 +1,42 @@
+﻿.thumbnails {
+    list-style: none;
+}
+.thumbnails li {
+    position: relative;
+    width: 15%;
+    float: left;
+    margin-right: 5px;
+    height: 90px;
+}
+.thumbnails li img {
+    width: 100%;
+    height: 100%;
+}
+.actions {
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    bottom: 25px;
+    left: 5%;
+}
+.thumbnails li:hover .actions {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1005;
+}
+.content1 {
+    min-height: 50px;
+}
+.box-adv:hover .actions {
+    opacity: 1;
+    visibility: visible;
+}
+.imgs {
+    /*position: relative;*/
+}
+.btnanh {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}

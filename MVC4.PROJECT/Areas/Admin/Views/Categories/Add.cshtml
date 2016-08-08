@@ -1,0 +1,254 @@
+﻿@model Model.EF.CW_Category
+@{
+    ViewBag.Title = "Thêm danh mục";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<section class="content-header">
+    <h1>
+        Thêm danh mục
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a href="#">Thêm danh mục</a></li>
+
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    @using (Html.BeginForm("Add", "Categories", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Lưu lại</button>
+                    <a href="javascript:history.go(-1);" class="btn btn-reddit"><i class="fa fa-repeat"></i> Quay lại</a>
+                </h3>
+                <div class="box-tools pull-right">
+                    
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="col-xs-12">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#activity" data-toggle="tab">Thông tin chung</a></li>
+                            <li><a href="#seo" data-toggle="tab">SEO</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="activity">
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.Title, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", @placeholder = "Tiều đề" })
+                                        @Html.ValidationMessageFor(m => m.Title)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                       @Html.LabelFor(m => m.Description, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @placeholder = "Mô tả" })
+                                        @Html.ValidationMessageFor(m => m.Description)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Cấp cha
+                                    </label>
+                                    <div class="col-sm-6">
+                                        @Html.DropDownListFor(x => x.ParentID, ViewBag.ListCateEdit as SelectList, "Cấp cha", new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(m => m.ParentID)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Kiểu danh mục
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select id="selecttypcate" class="form-control" name="TypeCode">
+                                            <option value="san-pham">Sản phẩm</option>
+                                            <option value="tin-tuc">Tin tức</option>
+                                            <option value="bai-viet">Bài viết</option>
+                                            <option value="file">File</option>
+                                            <option value="video">Video clips</option>
+                                            <option value="album">Thư viện ảnh</option>
+                                            <option value="lien-ket">Liên kết</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="linkcate">
+                                    <label class="col-sm-2 control-label">
+                                        Liên kết
+                                    </label>
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(m => m.Link, new {@class = "form-control", @placeholder = "Liên kết"})
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select name="Target" class="form-control" style="width: 120px;">
+                                            <option value="_parent">Trong trang</option>
+                                            <option value="_blank">Cửa sổ mới</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Hiện ở menu
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select multiple name="lstmenu" class="form-control select2">
+                                            @foreach (var item in ViewBag.SelectListItems as MultiSelectList)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Icon
+                                    </label>
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(m => m.Icon, new {@id = "txtimage", @class = "form-control", @placeholder = "Icon"})
+
+                                        @Html.ValidationMessageFor(m => m.Icon)
+                                      
+                                    </div>
+                                    <div class="col-sm-2">
+                                      
+                                        <input id="browseServer" class="btn" onclick="BrowseServer('txtimage');" type="button" value="Tải ảnh">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Kích hoạt
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.CheckBoxFor(m => m.IsActive, new { @Checked = "Checked" })
+                                    </div>
+                                </div>
+                              
+
+
+                            </div>
+                            <div class="tab-pane" id="seo">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.MetaTitle, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(m => m.MetaTitle, new { @class = "form-control", @placeholder = "MetaTitle" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.MetaKeywords, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(m => m.MetaKeywords, new { @class = "form-control", @placeholder = "MetaKeywords" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        @Html.LabelFor(m => m.MetaDescription, new { @class = "control-label" })
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control", @placeholder = "MetaDescription" })
+                                    </div>
+                                </div>
+                              
+                              
+                              
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                @Html.AntiForgeryToken()
+
+
+            </div>
+        </div>
+    }
+
+</section><!-- /.content -->
+@section jsFooter{
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            renderselect();
+            $("#selecttypcate").click(function () {
+                if ($("#selecttypcate option:selected").val() == 'lien-ket') {
+                    $("#linkcate").css("display", "block");
+                }
+                else {
+                    $("#linkcate").hide();
+                }
+            });
+        });
+        $(function () {
+
+            $(".select2").select2();
+        });
+        function BrowseServer(field) {
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (fileUrl) {
+                document.getElementById(field).value = fileUrl;
+            };
+            finder.popup();
+        }
+
+        function renderselect() {
+            var opt_template = "<option value='$id'>$level$title</option>";
+            $.getJSON('/api/categoriesapi/jtreetable?select=').done(function (data) {
+                var html = "";
+                $.each(data, function (i, item) {
+                    var id = item.ID;
+                    var title = item.Title;
+                    var level = item.Level;
+                    var txtlevel = "";
+                    for (j = 0; j < level; j++) {
+                        txtlevel = txtlevel + " -- ";
+                    }
+                    var temp = opt_template.replace("$id", id).replace("$title", title).replace("$level", txtlevel);
+                    html += temp;
+                });
+                $('#selectParent').html("<option value=''>Cấp cha</option>" + html);
+            });
+        }
+
+        function rendercategorytype() {
+            var strcatetype = "<option value='$id'>$title</option>";
+            $.getJSON('/api/categorytypeapi/selectcategory').done(function (data) {
+                var html = "";
+                $.each(data, function (i, item) {
+                    var id = item.TypeCode;
+                    var title = item.TypeTitle;
+                    var temp = strcatetype.replace("$id", id).replace("$title", title);
+                    html += temp;
+                });
+                $('#selecttypcate').html("<option value='lien-ket'>Chọn kiểu danh mục</option>" + html);
+            });
+        }
+        function renderchekboxmenu() {
+            var strmenu = "<span class='textcheck' ><input type='checkbox' name='DK_Menu_Category' class='checker' value ='$id' />$title</span>";
+            $.getJSON('/api/categorytypeapi/checkboxlistmenu').done(function (data) {
+                var html = "";
+                $.each(data, function (i, item) {
+                    var id = item.MenuCode;
+                    var title = item.Title;
+                    var temp = strmenu.replace("$id", id).replace("$title", title);
+                    html += temp;
+                });
+                $('#rendercheck').html(html);
+            });
+        }
+
+    </script>
+}

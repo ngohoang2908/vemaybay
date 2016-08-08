@@ -1,0 +1,305 @@
+﻿@model List<Model.EF.CW_Category>
+@{
+    ViewBag.Title = "Quản lý danh mục";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<!--Menu folder-->
+@section jsFooter{
+
+   
+    <script type="text/javascript">
+
+        function rendertreetable() {
+            var strhtml = "<div style='text-align: center; padding: 20px 0px;'><img src='/Content/themes/images/ajax-loader.gif' /></div>";
+            $('#grid').html(strhtml);
+
+            var tr_template = "";
+            tr_template = "<tr data-tt-id='{{ID}}' {{Parent}}> ";
+            tr_template += "  <td><span class='{{Class}}' data-id='{{ID}}' id='edittitle_{{ID}}'><a href='/admin/categories/edit/{{ID}}' title='sửa'> {{Title}} </a></span></td>"; //cột tiêu đề
+            tr_template += "  <td style='text-align:center;'>{{CreatedDate}}</td>"; //cột createddate
+            tr_template += "  <td><center>{{IsActive}}</center></td>"; //status
+            tr_template += "  <td> <center>  <a href='/admin/categories/edit/{{ID}}'  class='btn btn-mini btn-primary'  ><i class='fa fa-edit'></i> </a>";
+            tr_template += "     <a href='javascript:void(0)' data='{{ID}}' class='btn btn-mini btn-danger btndelte'><i class='fa fa-trash'></i></a></center>";
+            tr_template += "  </td>";
+            tr_template += "  <td><center><input type='checkbox' data-parent='{{Parentid}}' value='{{ID}}'/></center>"; //checkbox
+            tr_template += "  </td>";
+            tr_template += "  </tr>";
+            //alert(tr_template);
+            $.getJSON('/Api/CategoriesApi/JTreeTable?select=', { lang: '@Session["language"].ToString()' }).done(function (data) {
+                var html = "";
+                $.each(data, function (i, item) {
+                    var id = item.ID;
+                    var title = item.Title;
+                    var createddate = item.CreatedDate;
+                    var haschild = item.HasChild;
+                    var parent = item.Parent;
+                    var IsActive = item.IsActive;
+                    //alert(IsActive);
+                    var temp = tr_template.replace("{{ID}}", id).replace("{{ID}}", id).replace("{{ID}}", id).replace("{{ID}}", id).replace("{{ID}}", id).replace("{{ID}}", id).replace("{{ID}}", id).replace("{{ID}}", id).replace("{{Title}}", title).replace("{{CreatedDate}}", createddate).replace("{{Parentid}}", parent);
+                    if (parent != null) {
+                        temp = temp.replace("{{Parent}}", "data-tt-parent-id='" + parent + "'");
+                    } else {
+                        temp = temp.replace("{{Parent}}", "");
+                    }
+                    if (IsActive) {
+                        temp = temp.replace("{{IsActive}}", "<b data='" + id + "," + IsActive + "' class='label label-success active'>V</b>");
+                    } else {
+                        temp = temp.replace("{{IsActive}}", "<b data='" + id + "," + IsActive + "' class='label label-danger active'>X</b>");
+                    }
+                    if (haschild) {
+                        temp = temp.replace("{{Class}}", "folder");
+                    } else {
+                        temp = temp.replace("{{Class}}", "file");
+                    }
+                    html += temp;
+
+                });
+
+                var table = "";
+                table += "<table id=\"treetable\">";
+                table += "    <thead><tr>";
+                table += "         <th>Tiêu đề</th>";
+                table += "         <th style='text-align:center;'>Ngày tạo</th>";
+                table += "         <th style='width:50px; text-align:center;'>Hiển thị</th>";
+                table += "         <th style='width:110px;'></th>";
+                table += "         <th><center><input type='checkbox' id=\"title-checkbox\" /></center></th>";
+                table += "    </tr></thead>";
+                table += "    <tbody>" + html + "</tbody>";
+                table += "</table>";
+                $('#grid').html(table);
+                $("#treetable").treetable({ expandable: true });
+                $("#treetable tbody tr").mousedown(function () {
+                    $("tr.selected").removeClass("selected");
+                    $(this).addClass("selected");
+                });
+                jQuery('#treetable').treetable('expandAll');
+            });
+        }
+
+        //checked all
+        $(document).on("change", "#title-checkbox", function () {
+            var checkedStatus = this.checked;
+            var checkbox = $(this).parents('#grid').find('tr td input:checkbox');
+
+            checkbox.each(function () {
+                this.checked = checkedStatus;
+                if (this.checked) {
+                    checkbox.attr("selected", "checked");
+                    checkbox.parent('span').addClass('checked');
+                }
+                else {
+                    checkbox.attr("selected", "");
+                    checkbox.parent('span').removeClass('checked');
+                }
+            });
+        });
+
+
+        $(document).ready(function () {
+            rendertreetable();          
+            //xóa nhiều bản ghi cùng một nút
+            $(".delete").click(function () {
+                var cof = confirm("Bạn có thực sự muốn xóa những bản ghi này?");
+                if (cof == true) {
+                    var checkbox = $(this).parents('.box-body').find('tr td input:checkbox');
+                    var bool = false;
+                    var strid = "";
+                    checkbox.each(function () {
+                        if (this.checked) {
+                            bool = true;
+                            strid += this.getAttribute("value") + ",";
+                        }
+                    });
+
+                    if (!bool) {
+                        $.gritter.add({
+                            title: 'Chú ý.',
+                            text: 'Bạn vui lòng chọn một bản ghi để xóa!',
+                            sticky: false,
+                            class_name: 'my_class_gritter_alert'
+                        });
+                    }
+                    else {
+                        $.ajax(
+                            {
+                                type: "POST",
+                                url: '@Url.Action("Delete", "Categories")',
+                                beforeSend: function () {
+                                    $("#rendersearch").html("<div id='dvloading' style=' text-align: center; padding: 20px 0px;'><img src='/Content/themes/website/images/ajax-loader.gif' /></div>");
+                                },
+                                async: false,
+                                dataType: "json",
+                                data: { id: strid }
+                            })
+                            .done(function () {
+                                rendertreetable();
+                            })
+                            .fail(function () {
+                                $.gritter.add({
+                                    title: 'Thông báo lỗi.',
+                                    text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                                    sticky: false,
+                                    class_name: 'my_class_gritter_error'
+                                });
+                            });
+                    }
+                }
+
+            });
+            //xóa một bản ghi
+            $(document).on("click", ".btndelte", function () {
+            //$(".btndelte").click(function () {
+                //alert("OK");
+                var id = $(this).attr('data');
+                $(".deleleoneitem").attr('data', id);
+                $('.modal').modal('toggle');
+               
+                //showalert("Bạn có thực sự muốn xóa bản ghi này?", "Cảnh báo", true);
+            });
+            $(".deleleoneitem").click(function () {
+                var id = $(this).attr('data');
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: '/admin/Categories/DeleteOneItem',
+                        async: false,
+                        dataType: "json",
+                        data: { item: id }
+                    })
+                    .done(function () {
+                        //hidealert();
+                        $('.modal').hide();
+                        rendertreetable();
+                        window.location.reload();
+                    })
+                    .fail(function () {
+                        $.gritter.add({
+                            title: 'Thông báo lỗi.',
+                            text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_error'
+                        });
+                    });
+            });
+
+
+        });
+
+        $(document).on("click", ".active", function () {
+            //update isactive
+
+            var id = $(this).attr('data').split(',')[0];
+            var bool = $(this).attr('data').split(',')[1];
+         
+            $.ajax(
+                    {
+                        type: "POST",
+                        url: '@Url.Action("UpdateIsActive","Categories")',
+                        data: { id: id, isactive: bool }
+                    })
+
+                .done(function () {
+                    rendertreetable();
+                    $.gritter.add({
+                        title: 'Thông báo thành công.',
+                        text: 'Cập nhật thành công.',
+                        sticky: false,
+                        class_name: 'my_class_gritter_success'
+                    });
+                })
+                .fail(function () {
+                    $.gritter.add({
+                        title: 'Thông báo lỗi.',
+                        text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                        sticky: false,
+                        class_name: 'my_class_gritter_error'
+                    });
+                })
+
+        });
+        function checksub(id, bool) {
+            var checkbox = $('#grid').find('tr td input:checkbox');
+            checkbox.each(function () {
+                var parentid = this.getAttribute("data-parent");
+                var subid = this.getAttribute("value");
+                if (parentid == id) {
+                    if (bool == "checked") {
+                        this.checked = true;
+                    }
+                    else {
+                        this.checked = false;
+                    }
+                    checksub(subid, bool);
+                }
+            });
+        }
+    </script>
+    <script>
+        $(function () {
+            $("#treetable").DataTable();
+        });
+    </script>
+
+
+}
+<section class="content-header">
+    <h1>
+        Danh mục
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a href="#">Danh mục</a></li>
+        @*<li class="active">Blank page</li>*@
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box box-default">
+        <div class="box-header with-border">
+
+            <h3 class="box-title">
+                Có tất cả @if (ViewBag.CountCate != null)
+                {
+                    <span>@ViewBag.CountCate</span>
+                }
+                else
+                {
+                    <span>0</span>
+                } bản ghi
+            </h3>
+
+            <div class="text-left">
+                <br />
+                <a href="/admin/Categories/Add" class="btn btn-primary"><i class="fa fa-plus"></i> Thêm mới</a>
+                <a href="javascript:void(0)" class="btn btn-warning delete"><i class="fa fa-trash"></i> Xóa tất cả</a>
+            </div>
+        </div>
+        <div class="box-body">
+            <div id="grid">
+            </div>
+
+
+            <div class="modal modal-danger fade" id="myAlert" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Cảnh báo</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Bạn có thực sự muốn xóa bản ghi nay?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="javascript:void(0)" class="btn btn-outline pull-left closealert" data-dismiss="modal">Bỏ qua</a>
+                            <a href="javascript:void(0)" class="btn btn-outline deleleoneitem">Đồng ý</a>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </div><!-- /.box-body -->
+        <div class="box-footer">
+
+        </div><!-- /.box-footer-->
+    </div><!-- /.box -->
+</section><!-- /.content -->

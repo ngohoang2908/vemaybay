@@ -1,0 +1,245 @@
+﻿@model IEnumerable<Model.EF.CW_Contact>
+@{
+    ViewBag.Title = "Quản lý liên hệ khách hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    int i = 1;
+}
+
+<section class="content-header">
+    <h1>
+        Quản lý liên hệ khách hàng
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a href="#">Liên hệ khách hàng</a></li>
+
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">
+                Có tất cả @if (Model != null)
+                {
+                    <span>@Model.Count()</span>
+                }
+                else
+                {
+                    <span>0</span>
+                } bài viết
+            </h3>
+            <div class="text-left">
+                <br />
+               @* <a href="/admin/admincontact/add" class="btn btn-primary"><i class="fa fa-plus"></i> Thêm mới</a>*@
+                <a href="javascript:void(0)" class="btn btn-warning delete"><i class="fa fa-trash"></i> Xóa tất cả</a>
+            </div>
+
+
+        </div><!-- /.box-header -->
+        <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="width:20px;">STT</th>
+                        <th>Tên khách</th>
+                        <th>Tiêu đề</th>
+                        <th>Email</th>
+                        <th style="width:80px">Điện thoại</th>
+
+                        <th>Ngày gửi</th>
+                        <th style="width:80px;">Trạng thái</th>
+                        <th width="100px"></th>
+                        <th>
+                            <input type="checkbox" id="title-checkbox" name="title-checkbox" />
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr id="trow_@item.ID">
+                            <th style="text-align:center">@i.ToString()</th>
+                            @if (item.IsRead)
+                            {
+                                <td style="text-align: center">@item.FullName</td>
+                            }
+                            else
+                            {
+                                <td style="text-align: center; font-weight: bold">@item.FullName</td>
+                            }
+                            <td>@item.Title</td>
+                            <td>
+                                <center>@item.Email</center>
+                            </td>
+                            <td>
+                                <center>
+                                    @item.Phone
+                                </center>
+                            </td>
+
+                            <td style="text-align: center">
+                                @item.CreatedDate.ToShortDateString()
+                            </td>
+                            <td style="text-align: center">
+                                @if (item.IsRead)
+                                {
+                                    <span>Đã đọc</span>
+                                }
+                                else
+                                {
+                                    <b style="color: green">Chưa đọc</b>
+                                }
+                            </td>
+                            <td>
+                                <center>
+                                    <a href="javascript:void(0)" data-id="@item.ID" class='btn btn-primary btnview'>Xem chi tiết</a>
+                                    <a href="javascript:void(0)" data="@item.ID" class='btn btn-mini btn-danger btndelte' data-toggle="modal" data-target="#myAlert"><i class="fa fa-trash"></i></a>
+                                </center>
+                            </td>
+                            <td>
+                                <center><input type="checkbox" value="@item.ID" /></center>
+                            </td>
+                        </tr>
+                            i = i + 1;
+                    }
+
+
+                </tbody>
+
+            </table>
+
+
+            <div class="modal modal-danger" id="myAlert">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Cảnh báo</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Bạn có thực sự muốn xóa bản ghi nay?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="javascript:void(0)" class="btn btn-outline pull-left closealert" data-dismiss="modal">Bỏ qua</a>
+                            <a href="javascript:void(0)" class="btn btn-outline deleleoneitem">Đồng ý</a>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+</section><!-- /.content -->
+<div id="dialog">
+    <iframe id="myIframe" style="border: 0; width: 100%; height: 100%;"></iframe>
+</div>
+@section jsFooter{
+    <script>
+        $(function () {
+            $("#example1").DataTable();
+        });
+    </script>
+   <script>
+
+    $(document).ready(function () {
+
+        var dialog = $("#dialog").dialog({
+            autoOpen: false,
+            show: "fade",
+            hide: "fade",
+            modal: true,
+            height: '400',
+            width: '700',
+            resizable: true,
+            title: 'Thông tin chi tiết liên hệ',
+            close: function () {
+                window.location.reload();
+            },
+            open: function (event, ui) {
+                $('#dialog').css('overflow', 'hidden'); //this line does the actual hiding
+            }
+        });
+        $('.btnview').click(function () {
+            var proid = $(this).attr("data-id");
+            $("#dialog #myIframe").attr("src", "/admin/admincontact/view?id=" + proid);
+            dialog.dialog('open');
+            return false;
+        });
+        //checked all
+        $("#title-checkbox").change(function () {
+            var checkedStatus = this.checked;
+            var checkbox = $(this).parents('.box').find('tr td input:checkbox');
+
+            checkbox.each(function () {
+                this.checked = checkedStatus;
+                if (this.checked) {
+                    checkbox.attr("selected", "checked");
+                    checkbox.parent('span').addClass('checked');
+                }
+                else {
+                    checkbox.attr("selected", "");
+                    checkbox.parent('span').removeClass('checked');
+                }
+            });
+        });
+
+        //xóa nhiều bản ghi cùng một nút
+        $(".delete").click(function () {
+            var cof = confirm("Bạn có thực sự muốn xóa những bản ghi đã chọn ?");
+            if (cof == true) {
+                var checkbox = $(this).parents('.box').find('tr td input:checkbox');
+                var bool = false;
+                checkbox.each(function () {
+                    if (this.checked) {
+                        bool = true;
+                        $.ajax(
+                            {
+                                type: "POST",
+                                url: '/AdminContact/Delete',
+                                beforeSend: function () {
+                                    $("#rendersearch").html("<div id='dvloading' style=' text-align: center; padding: 20px 0px;'><img src='/Content/themes/website/images/ajax-loader.gif' /></div>");
+                                },
+                                async: false,
+                                dataType: "json",
+                                data: { id: $(this).val() }
+                            })
+                            .fail(function () {
+                                alert("cố lỗi xảy ra!!");
+                            });
+                    }
+                });
+                if (!bool)
+                    alert("Bạn vui lòng chọn một bản ghi để xóa!");
+                else
+                    window.location.reload();
+            }
+
+        });
+        //xóa một bản ghi
+        $(".btndelte").click(function () {
+            var id = $(this).attr('data');
+            $(".deleleoneitem").attr('data', id);
+            //showalert("Bạn có thực sự muốn xóa bản ghi này?", "Cảnh báo", true);
+        });
+        $(".deleleoneitem").click(function () {
+            var id = $(this).attr('data');
+            $.ajax(
+                {
+                    type: "POST",
+                    url: '/AdminContact/Delete',
+                    data: { id: id }
+                })
+                .done(function () {
+                    window.location.reload();
+                })
+                .fail(function () {
+                    alert("cố lỗi xảy ra!!");
+                });
+        });
+
+
+
+    });
+</script>
+}

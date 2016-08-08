@@ -1,0 +1,106 @@
+﻿@model Model.EF.CW_Customers
+
+@{
+    ViewBag.Title = "Sửa khách hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header">
+    <h1>
+        Sửa khách hàng
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active"><a href="/admin/customer">Khách hàng</a></li>
+
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("EditCustomer", "User", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Lưu</button>
+                    <a href="#" onclick="javascript:history.go(-1);" class="btn btn-reddit"><i class="fa fa-repeat"></i> Quay lại</a>
+                </h3>
+                <div class="box-tools pull-right">
+                   
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="validation-group">
+                        @Html.ValidationSummary(true)
+                    </div>
+                    <div class="col-md-12">
+                        @Html.LabelFor(m => m.UserNameCustomer, new { @class = "control-label" })
+
+                        @Html.TextBoxFor(m => m.UserNameCustomer, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.UserNameCustomer)
+                        @Html.HiddenFor(x => x.UserId)
+                        @Html.HiddenFor(x => x.UserProfile.UserId)
+                        @Html.HiddenFor(x => x.UserProfile.UserName)
+                    </div>
+                    
+                    <div class="col-md-12">
+                        @Html.LabelFor(m => m.UserProfile.FullName, new { @class = "control-label" })
+
+                        @Html.TextBoxFor(m => m.UserProfile.FullName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.UserProfile.FullName)
+
+                    </div>
+                    <div class="col-md-12">
+                        @Html.LabelFor(m => m.CustomerGroupsID, new { @class = "control-label" })
+
+                        @Html.DropDownListFor(m => m.CustomerGroupsID, ViewBag.CustomerGroup as SelectList, "--Nhóm khách hàng--", new { @class = "form-control" })
+
+                    </div>
+                    <div class="col-xs-12">
+                        @Html.LabelFor(m => m.UserProfile.Mobile, new { @class = "control-label" })
+
+                        @Html.TextBoxFor(m => m.UserProfile.Mobile, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.UserProfile.Mobile)
+                    </div>
+                    <div class="col-xs-12">
+                        @Html.LabelFor(m => m.NickYahoo, new { @class = "control-label" })
+
+                        @Html.TextBoxFor(m => m.NickYahoo, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.NickYahoo)
+
+                    </div>
+                    <div class="col-xs-12">
+                        @Html.LabelFor(m => m.NickSkype, new { @class = "control-label" })
+
+                        @Html.TextBoxFor(m => m.NickSkype, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.NickSkype)
+
+                    </div>
+                    <div class="col-xs-12">
+                        @Html.LabelFor(m => m.Facebook, new { @class = "control-label" })
+
+                        @Html.TextBoxFor(m => m.Facebook, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Facebook)
+
+                    </div>
+                    <div class="col-xs-12">
+                        @Html.LabelFor(m => m.UserProfile.Address, new { @class = "control-label" })
+
+                        @Html.TextAreaFor(m => m.UserProfile.Address, new { @class = "form-control", @row = "3" })
+                        @Html.ValidationMessageFor(m => m.UserProfile.Address)
+
+                    </div>
+                    <div class="col-xs-12">
+                        <br />
+                        <button type="submit" class="btn btn-success">Lưu lại</button>
+
+                    </div>
+                    @Html.AntiForgeryToken()
+                </div><!-- /.row -->
+            </div>
+        </div>
+    }
+
+</section>
+

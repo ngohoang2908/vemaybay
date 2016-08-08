@@ -1,0 +1,105 @@
+﻿@model IEnumerable<Model.EF.CW_Adv>
+@{
+    ViewBag.Title = @StaticResources.Resources.Manager_ADV;
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    int i = 1;
+}
+<section class="content-header">
+    <h1>
+        @StaticResources.Resources.Manager_ADV
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> @StaticResources.Resources.Home</a></li>
+        <li><a href="#">@StaticResources.Resources.Advertisement</a></li>
+
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">
+                @StaticResources.Resources.Have_everything @if (Model != null)
+                {
+                    <span>@Model.Count()</span>
+                }
+                else
+                {
+                    <span>0</span>
+                } @StaticResources.Resources.Advertisement
+            </h3>
+            <div class="text-left">
+                <br />
+                <a href="/admin/adv/add" class="btn btn-primary"><i class="fa fa-plus"></i> @StaticResources.Resources.Add_New</a>
+                <label class="pull-right">
+                    @StaticResources.Resources.Search
+                    <select id="selectpos" style="width: 200px;" class="form-control select2">
+                        <option value="0">-- @StaticResources.Resources.Select_location --</option>
+                        <option value="1">@StaticResources.Resources.Slide_home</option>
+                        <option value="2">@StaticResources.Resources.Adv_right</option>
+                        <option value="3">@StaticResources.Resources.Adv_left</option>
+                        <option value="4">@StaticResources.Resources.Logo_cus</option>
+                        <option value="5">@StaticResources.Resources.Adv_under</option>
+                        <option value="6">@StaticResources.Resources.Adv_pro_feat</option>
+                        <option value="7">@StaticResources.Resources.Adv_pro_prom</option>
+                    </select>
+                </label>
+            </div>
+
+
+        </div><!-- /.box-header -->
+        <div class="box-body">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-sm-4 col-md-2" id="trow_@item.ID">
+                        <div class="form-group box-adv">
+                            <a class="thumbnail lightbox_trigger" href="@item.Image">
+                                <img src="@item.Image" alt="@item.Title">
+                            </a>
+                            <div class="actions">
+                                <a title="Sửa" href="/admin/adv/edit/@item.ID" class='btn btn-mini btn-primary'><i class="fa fa-pencil icon-white"></i></a>
+                                <a href="#" title="Xóa" data="@item.ID" class='btn btn-mini btn-danger btndelte'><i class="fa fa-trash icon-white"></i></a>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <div class="modal modal-danger" id="myAlert">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">@StaticResources.Resources.Warning</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>@StaticResources.Resources.Alert_delete</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="javascript:void(0)" class="btn btn-outline pull-left closealert" data-dismiss="modal">@StaticResources.Resources.Close</a>
+                            <a href="javascript:void(0)" class="btn btn-outline deleleoneitem">@StaticResources.Resources.Agree</a>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+</section><!-- /.content -->
+@section jsFooter{
+<script src="~/asset/admin/js/advController.js"></script>
+    <script>
+        $(function () {
+            $("#example1").DataTable();
+        });
+        $(function () {
+
+            $(".select2").select2();
+        });
+    </script>
+    @*<script src="/asset/admin/js/adv.js"></script>*@
+}

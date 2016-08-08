@@ -1,0 +1,141 @@
+﻿@model IEnumerable<Model.EF.CW_NewsComment>
+@{
+    ViewBag.Title = "Quản lý bình luận tin tức";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">
+            <span class="icon">
+                <i class="fa fa-file"></i>
+            </span>
+            Tin tức: @ViewBag.NewsTitle
+        </h3>
+        <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <ul class="recent-posts">
+            @foreach (var item in Model)
+            {
+                <li>
+
+                    <div class="article-post">
+                        <div class="fr">
+
+                            @if (!item.IsActive)
+                            {
+                                <a href="javascript:void(0)" class="btn btn-success btnview active" data-boo="@item.IsActive" title="@item.CommentID">Hiển thị ra web</a>
+                            }
+                            else
+                            {
+                                <a href="javascript:void(0)" class="btn btn-warning btnview active" data-boo="@item.IsActive" title="@item.CommentID">Không cho hiển thị</a>
+                            }
+                            <a href="javascript:void(0)" class="btn btn-danger btnview btndelte" data="@item.CommentID">Xóa</a>
+                        </div>
+                        <span class="user-info"> Đăng bởi: @item.FullName / Ngày: @item.CreatedDate.ToString("dd/MM/yyyy") / Giờ: @item.CreatedDate.ToShortTimeString()</span>
+                        <p><a href="javascript:void(0)">@item.Content</a> </p>
+                    </div>
+                </li>
+            }
+
+            <li>@*<button class="btn btn-warning btn-mini">View All</button>*@</li>
+        </ul>
+        <div class="form-actions txtc">
+            <a href="/admin/news" class="btn btn-back" title="Quay về danh sách tin tức"></a>
+            <div style="float:right; width: auto; padding: 12px; line-height: 12px; text-shadow: 0 1px 0 #ffffff;">
+                Có tất cả <span style="font-weight:bold; color: blue;">@ViewBag.CountItem</span> bình luận
+            </div>
+        </div>
+    @* Modal hien thi *@
+        <div class="modal modal-danger" id="myAlert">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Cảnh báo</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có thực sự muốn xóa bản ghi nay?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0)" class="btn btn-outline pull-left closealert" data-dismiss="modal">Bỏ qua</a>
+                        <a href="javascript:void(0)" class="btn btn-outline deleleoneitem">Đồng ý</a>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div><!-- /.box-body -->
+    
+</div><!-- /.box -->
+@section jsFooter{
+    <script>
+        $(document).ready(function () {
+
+            //update isactive
+            $("a.active").click(function () {
+                var id = $(this).attr('title');
+                var bool = $(this).attr('data-boo');
+                $.ajax(
+                        {
+                            type: "POST",
+                            url: '@Url.Action("UpdateIsActive", "NewsComment")',
+                            data: { id: id, isactive: bool }
+                        })
+
+                    .done(function () {
+                        //$(this).html("Không hiển thị");
+                        window.location.reload();
+                    })
+                    .fail(function () {
+                        $.gritter.add({
+                            title: 'Thông báo lỗi.',
+                            text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_error'
+                        });
+                    })
+            });
+
+            //xóa một bản ghi
+            $(".btndelte").live('click', function () {
+                var id = $(this).attr('data');
+                $(".deleleoneitem").attr('data', id);
+                showalert("Bạn có thực sự muốn xóa bản ghi này?", "Cảnh báo", true);
+            });
+            $(".deleleoneitem").click(function () {
+                var id = $(this).attr('data');
+                $.ajax(
+                          {
+                              type: "POST",
+                              url: '@Url.Action("DeleteMutileItem", "NewsComment")',
+                              data: { item: id }
+                          })
+
+                    .done(function () {
+                        hidealert();
+                        window.location.reload();
+                    })
+                    .fail(function () {
+                        $.gritter.add({
+                            title: 'Thông báo lỗi.',
+                            text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                            sticky: false,
+                            class_name: 'my_class_gritter_error'
+                        });
+                    })
+            });
+            //đóng alert
+            $('.close').click(function () {
+                hidealert();
+            });
+            $('.closealert').click(function () {
+                hidealert();
+            });
+
+
+        });
+    </script>
+}

@@ -1,0 +1,107 @@
+﻿.btn-mini {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+}
+[class*="span"] {
+
+min-height:1px;
+
+}
+input.span12,
+textarea.span12,
+.uneditable-input.span12 { width:926px }
+input.span11,
+textarea.span11,
+.uneditable-input.span11 { width:846px }
+input.span10,
+textarea.span10,
+.uneditable-input.span10 { width:766px }
+input.span9,
+textarea.span9,
+.uneditable-input.span9 { width:686px }
+input.span8,
+textarea.span8,
+.uneditable-input.span8 { width:606px }
+input.span7,
+textarea.span7,
+.uneditable-input.span7 { width:526px }
+input.span6,
+textarea.span6,
+.uneditable-input.span6 { width:446px }
+input.span5,
+textarea.span5,
+.uneditable-input.span5 { width:366px }
+input.span4,
+textarea.span4,
+.uneditable-input.span4 { width:286px }
+input.span3,
+textarea.span3,
+.uneditable-input.span3 { width:206px }
+input.span2,
+textarea.span2,
+.uneditable-input.span2 { width:126px }
+input.span1,
+textarea.span1,
+.uneditable-input.span1 { width:46px }
+.isdefault,.ishome,.active,.ispromotion,.isfeatured,.ishot,.isnews {
+    cursor: pointer;
+}
+.span1,.span3,.span2,.span4,.span5,.span6,.span7,.span8,.span9,.span10,.span11,.span12  {
+    
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #555;
+    background-color: #FFF;
+    background-image: none;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+
+.input-text {
+    width: 30%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #555;
+    background-color: #FFF;
+    background-image: none;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+#linkcate{display: none}
+.btnview {
+    padding: 0px 3px;
+}
+.box-adv {
+    position: relative;
+}
+.box-adv img {
+    max-width: 100%;
+    width: 100%;
+    cursor: pointer;
+}
+.actions {
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    bottom: 5px;
+    left: 45%;
+}
+.box-adv:hover .actions {
+    opacity: 1;
+    visibility: visible;
+}
+.icon-white {
+    color: #fff;
+}
+
+select{ max-width: 500px;}

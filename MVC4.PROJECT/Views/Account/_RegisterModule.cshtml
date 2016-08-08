@@ -1,0 +1,88 @@
+﻿@model MVC4.PROJECT.Models.RegisterCustomersModel
+<h4 class="checkout-subtitle">Tạo tài khoản</h4>
+<p class="text title-tag-line">Hãy đăng ký thành viên để có thể sử dụng tối đa chức năng trên website.</p>
+<div class="register-form outer-top-xs">
+    @using (Ajax.BeginForm("Register", "Account", new AjaxOptions
+    {
+        UpdateTargetId = "notification",
+        OnSuccess = "OnSuccesss",
+        OnFailure = "OnFailures",
+        OnBegin = "OnBegins"
+    }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="validation-group">
+            @Html.ValidationSummary(true)
+        </div>
+        <div class="form-group">
+            <label class="info-title" for="exampleInputEmail2">
+                Họ và tên
+                <span>*</span>
+            </label>
+            @Html.TextBoxFor(m => m.CW_Customers.UserProfile.FullName, new {@class = "form-control unicase-form-control text-input"})
+            @Html.ValidationMessageFor(m => m.CW_Customers.UserProfile.FullName)
+        </div>
+        <div class="form-group">
+            <label class="info-title" for="exampleInputEmail2">
+                Tài khoản (Email)
+                <span>*</span>
+            </label>
+            @Html.TextBoxFor(m => m.CW_Customers.UserNameCustomer, new {@class = "form-control unicase-form-control text-input"})
+            @Html.ValidationMessageFor(m => m.CW_Customers.UserNameCustomer)
+        </div>
+        <div class="form-group">
+            <label class="info-title" for="exampleInputPassword1">
+                Mật khẩu
+                <span>*</span>
+            </label>
+
+            @Html.PasswordFor(m => m.Password, new {@class = "form-control unicase-form-control text-input"})
+            @Html.ValidationMessageFor(m => m.Password)
+        </div>
+        <div class="form-group">
+            <label class="info-title" for="exampleInputPassword1">
+                Nhập lại mật khẩu
+                <span>*</span>
+            </label>
+
+            @Html.PasswordFor(m => m.ConfirmPassword, new {@class = "form-control unicase-form-control text-input"})
+            @Html.ValidationMessageFor(m => m.ConfirmPassword)
+        </div>
+        <button class="btn-upper btn btn-primary checkout-page-button" type="submit">Đăng ký</button>
+    }
+    <div class="clearfix"></div>
+</div>
+<br/>
+<span class="checkout-subtitle outer-top-xs">Đăng ký ngay và bạn có thể : </span>
+<div class="checkbox">
+    <label class="checkbox">
+        <input id="speed" type="checkbox" value="option1" checked="checked" readonly="readonly">
+        Tăng tốc độ thanh toán đơn hàng.
+    </label>
+    <label class="checkbox">
+        <input id="track" type="checkbox" value="option2" checked="checked" readonly="readonly">
+        Theo dõi đơn hàng của bạn một cách dễ dàng.
+    </label>
+    <label class="checkbox">
+        <input id="keep" type="checkbox" value="option3" checked="checked" readonly="readonly">
+        Giữ lại thông tin đơn hàng khi bạn đã mua hàng trên website.
+    </label>
+</div>
+<script>
+    function OnBegins() {
+        jQuery("#notification").html("<div class='alert alert-info'>Đang xử lý......</div>");
+        jQuery('html, body').animate({ scrollTop: 10 }, 'slow');
+    }
+    function OnFailures() {
+        alert("Gửi đi thất bại.");
+    }
+    function OnSuccesss(data) {
+        if (data.flag == '1') {
+            window.location = "/account/registercomplete";
+        }
+        else {
+            jQuery("#notification").html("<div class='alert alert-warning'><strong>Thât bại !</strong> Tài khoản này đã tồn tại, vui lòng nhập tài khoản khác !</div>");
+        }
+    }
+
+</script>

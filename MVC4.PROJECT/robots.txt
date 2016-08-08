@@ -1,0 +1,7 @@
+﻿User-agent:*
+Disallow:/Scripts/
+Disallow:/Content/
+Disallow:/asset/
+Disallow:/Images/
+Disallow:/Areas/
+Disallow:/bin/
